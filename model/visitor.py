@@ -1,9 +1,10 @@
 from database import SQLite
 
-class Event():
+class Visitor():
 
-    def __init__(self, name):
+    def __init__(self, name, password):
         self.name = name
+        self.password = password
 
     def to_dict(self):
         event_data = self.__dict__
@@ -16,28 +17,21 @@ class Event():
     #     return self
 
 
-    def create(name):
+    def register(name, password):
         result = None
-        query = "INSERT INTO events {} VALUES ('{}')"
-        args = (name)
-        query = query.format("(name)", args)
+        query = "INSERT INTO visitors {} VALUES {}"
+        args = (name, password)
+        query = query.format("(name, password)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
 
     @staticmethod
-    def all_names():
-        with SQLite() as db:
-            result = db.execute(
-                    "SELECT name FROM events").fetchall()
-        return [''.join(event_name) for event_name in result]
-
-    @staticmethod
     def all():
         with SQLite() as db:
             result = db.execute(
-                    "SELECT * FROM events").fetchall()
-        return [User(*row) for row in result]
+                    "SELECT name, password FROM visitors").fetchall()
+        return [Visitor(*row).to_dict() for row in result]
 
     # @staticmethod
     # def __get_save_query(self):

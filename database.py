@@ -9,7 +9,18 @@ conn.cursor().execute('''
 CREATE TABLE IF NOT EXISTS events
     (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE
+        name TEXT NOT NULL UNIQUE,
+        count INTEGER
+    )
+''')
+conn.commit()
+
+conn.cursor().execute('''
+CREATE TABLE IF NOT EXISTS visitors
+    (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        password TEXT
     )
 ''')
 conn.commit()
