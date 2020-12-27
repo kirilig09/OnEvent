@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import Event from './Event.js';
-import EventList from './EventList.js';
+import EventRouter from './EventRouter.js';
 import Registration from './Registration.js'
 import './App.css';
 import {
@@ -38,7 +38,7 @@ function App() {
         
         <Switch>
           <Route path="/events">
-            <EventList />
+            <EventRouter />
           </Route>
           <Route path="/registration">
             <Registration />

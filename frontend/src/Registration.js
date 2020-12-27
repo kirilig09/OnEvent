@@ -1,9 +1,9 @@
 import React from 'react';
 import { 
     makeStyles,
-    Button
+    Button,
+    TextField
 } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
 
 // const useStyles = makeStyles((theme) => ({
 //     textBox: {
@@ -53,10 +53,8 @@ class Registration extends React.Component {
         return  <div>
                     <form noValidate autoComplete="off">
                         <TextField id="standard-basic" label="Username" value={this.state.username} onChange={this.handleChangeU} />
-                        {/* <input type="text" value={this.state.username} onChange={this.saveUsername} /> */}
                         <br></br>
                         <TextField id="standard-basic" label="Password" value={this.state.password} onChange={this.handleChangeP}/>
-                        {/* <input type="text" value={this.state.password} onChange={this.savePassword} /> */}
                     </form>
                     <br></br>
                     <div>

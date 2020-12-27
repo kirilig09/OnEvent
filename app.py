@@ -32,5 +32,14 @@ def registration():
 
     return content
 
+@app.route("/create-event", methods=['GET', 'POST'])
+def createEvent():
+    content = request.get_json(force=True)
+    print(content)
+
+    Event.create(content.get('name'), 0)
+
+    return content
+
 if __name__ == "__main__":
     app.run()
