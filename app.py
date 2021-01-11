@@ -3,13 +3,10 @@ from flask_cors import CORS
 import json
 
 from model.event import Event
-from model.visitor import Visitor
+from model.user import User
 
 app = Flask(__name__)
 CORS(app)
-
-# Event.create('Holy', 15)
-# Event.create('Smokes', 33)
 
 @app.route("/")
 def home():
@@ -22,13 +19,16 @@ def events_list():
         all_events.append(event)
     return jsonify(all_events)
 
-@app.route("/registration", methods=['GET', 'POST'])
-def registration():
+@app.route("/register", methods=['GET', 'POST'])
+def register():
     content = request.get_json(force=True)
     
     print(content)
 
-    Visitor.register(content.get('username'), content.get('password'))
+    if content.get('role') == "visitor":
+        User.registerVisitor(content.get('username'), content.get('password'), content.get('role'))
+    elif content.get('role') == "participant":
+        User.registerParticipant(content.get('username'), content.get('password'), content.get('role'), content.get('event'))
 
     return content
 

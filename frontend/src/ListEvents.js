@@ -24,7 +24,7 @@ class ListEvents extends React.Component {
         return (
             <div>
                 <br></br>
-                <Button color="primary" variant="contained" onClick={() => {this.loadEvents()}}>Current events</Button>
+                <Button color="primary" variant="contained" onClick={() => {this.loadEvents()}}>Reload events</Button>
                 <br></br>
                 {this.state.events.map((event) => {
                     return <Event name={event.name} count={event.count}></Event>

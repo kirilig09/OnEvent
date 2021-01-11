@@ -19,7 +19,9 @@ class Registration extends React.Component {
         super(props);
         this.state = {
                 username: '',
-                password: ''
+                password: '',
+                role: props.user_role,
+                event: props.event
         };
 
         this.handleChangeU = this.handleChangeU.bind(this);
@@ -39,7 +41,7 @@ class Registration extends React.Component {
         const jsonResult = JSON.stringify(this.state);
         console.log(jsonResult);
 
-        fetch('http://127.0.0.1:5000/registration', {
+        fetch('http://127.0.0.1:5000/register', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

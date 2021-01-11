@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import Event from './Event.js';
 import EventRouter from './EventRouter.js';
-import Registration from './Registration.js'
+import Registration from './Registration.js';
 import './App.css';
 import {
   BrowserRouter as Router,
@@ -41,7 +41,7 @@ function App() {
             <EventRouter />
           </Route>
           <Route path="/registration">
-            <Registration />
+            <Registration user_role="visitor" event="" />
           </Route>
         </Switch>
       </div>

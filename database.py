@@ -16,11 +16,13 @@ CREATE TABLE IF NOT EXISTS events
 conn.commit()
 
 conn.cursor().execute('''
-CREATE TABLE IF NOT EXISTS visitors
+CREATE TABLE IF NOT EXISTS users
     (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
-        password TEXT
+        password TEXT NOT NULL,
+        role TEXT NOT NULL,
+        event TEXT
     )
 ''')
 conn.commit()
