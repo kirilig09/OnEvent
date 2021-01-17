@@ -1,5 +1,5 @@
 import React from 'react';
-import {register} from './Fetch';
+import {login} from './Fetch';
 import { 
     makeStyles,
     Button,
@@ -13,7 +13,7 @@ import {
 //     },
 // }));
 
-class Registration extends React.Component {
+class Login extends React.Component {
     //const classes = useStyles();
 
     constructor(props) {
@@ -39,7 +39,7 @@ class Registration extends React.Component {
     }
     
     saveCredentials() {
-        register(this.state.username, this.state.password, this.state.role, this.state.event);
+        login(this.state.username, this.state.password);
     }
 
     render() {
@@ -47,14 +47,14 @@ class Registration extends React.Component {
                     <form noValidate autoComplete="off">
                         <TextField id="standard-basic" label="Username" value={this.state.username} onChange={this.handleChangeU} />
                         <br></br>
-                        <TextField id="standard-basic" label="Password" type="password" value={this.state.password} onChange={this.handleChangeP}/>
+                        <TextField id="standard-basic" label="Password" value={this.state.password} onChange={this.handleChangeP}/>
                     </form>
                     <br></br>
                     <div>
-                        <Button color="primary" variant="contained" onClick={this.saveCredentials}>Register</Button>
+                        <Button color="primary" variant="contained" onClick={this.saveCredentials}>Log in</Button>
                     </div>
                 </div>
     }
 }
 
-export default Registration;
+export default Login;

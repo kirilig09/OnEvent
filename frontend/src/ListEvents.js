@@ -14,7 +14,7 @@ class ListEvents extends React.Component {
     }
     
     async loadEvents() {
-        const response = await fetch('http://127.0.0.1:5000/events');
+        const response = await fetch('http://127.0.0.1:5000/api/events');
         const result = await response.json();
         console.log(result);
         this.setState({events: result});
@@ -27,7 +27,7 @@ class ListEvents extends React.Component {
                 <Button color="primary" variant="contained" onClick={() => {this.loadEvents()}}>Reload events</Button>
                 <br></br>
                 {this.state.events.map((event) => {
-                    return <Event name={event.name} count={event.count}></Event>
+                    return <Event event={event}></Event>
                 })}
             </div>
         );

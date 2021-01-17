@@ -1,5 +1,5 @@
 import React from 'react';
-import Event from './Event.js';
+import {create_event} from './Fetch';
 import {
     Button,
     TextField
@@ -22,17 +22,7 @@ class CreateEvent extends React.Component {
     }
 
     saveName() {
-        const jsonResult = JSON.stringify(this.state);
-        console.log(jsonResult);
-
-        fetch('http://127.0.0.1:5000/create-event', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: jsonResult
-        })
+        create_event(this.state.name);
     }
 
     render() {

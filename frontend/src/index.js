@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {get_session} from './Fetch';
+
+get_session();
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

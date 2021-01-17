@@ -2,7 +2,8 @@ from database import SQLite
 
 class Event():
 
-    def __init__(self, name, count):
+    def __init__(self, id, name, count):
+        self.id = id
         self.name = name
         self.count = count
 
@@ -37,7 +38,7 @@ class Event():
     def all():
         with SQLite() as db:
             result = db.execute(
-                    "SELECT name, count FROM events").fetchall()
+                    "SELECT * FROM events").fetchall()
         return [Event(*row).to_dict() for row in result]
 
     # @staticmethod

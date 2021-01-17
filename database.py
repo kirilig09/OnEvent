@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS users
         name TEXT NOT NULL,
         password TEXT NOT NULL,
         role TEXT NOT NULL,
-        event TEXT
+        event_id INTEGER,
+        FOREIGN KEY(event_id) REFERENCES events(id)
     )
 ''')
 conn.commit()

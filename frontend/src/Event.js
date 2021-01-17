@@ -15,7 +15,7 @@ class Event extends React.Component {
     render() {
         return (
             <div>
-                <p>Name: {this.props.name} | Visitors: {this.props.count}</p>
+                <p>Name: {this.props.event.name} | Visitors: {this.props.event.count}</p>
                 <Router>
                     <div>
                     {/* <Link color="inherit" component={RouterLink} to="/list">
@@ -30,7 +30,7 @@ class Event extends React.Component {
                             <ListEvents />
                         </Route> */}
                         <Route path="/participate">
-                            <Registration user_role="participant" event={this.props.name.toString()} />
+                            <Registration user_role="participant" event={this.props.event.id} />
                         </Route>
                     </Switch>
                     </div>

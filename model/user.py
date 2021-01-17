@@ -1,6 +1,7 @@
 from database import SQLite
+from flask_login import UserMixin
 
-class User():
+class User(UserMixin):
 
     def __init__(self, name, password, role, event=None):
         self.name = name
@@ -36,7 +37,7 @@ class User():
         result = None
         query = "INSERT INTO users {} VALUES {}"
         args = (name, password, role, event)
-        query = query.format("(name, password, role, event)", args)
+        query = query.format("(name, password, role, event_id)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
