@@ -1,6 +1,7 @@
 import React from 'react';
 import ListEvents from './ListEvents.js';
 import CreateEvent from './CreateEvent.js';
+import {whoami} from './Fetch';
 import {
     Button,
     Link
@@ -15,13 +16,19 @@ import {
 class EventRouter extends React.Component {
         
     render() {
+        const user_role = whoami().role;
+
         return <Router>
                     <div>
                     <Link color="inherit" component={RouterLink} to="/list">
                         <Button color="primary" variant="contained">List events</Button>
                     </Link>
                     <Link color="inherit" component={RouterLink} to="/create">
-                        <Button color="primary" variant="contained">Create event</Button>
+                        {user_role == "admin" ? 
+                            <Button color="primary" variant="contained">Create event</Button> :
+                            null
+                        }
+                        
                     </Link>
                     <br></br>
                     

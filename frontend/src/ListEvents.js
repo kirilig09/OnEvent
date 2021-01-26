@@ -14,7 +14,7 @@ class ListEvents extends React.Component {
     }
     
     async loadEvents() {
-        const response = await fetch('http://127.0.0.1:5000/api/events');
+        const response = await fetch('/api/events');
         const result = await response.json();
         console.log(result);
         this.setState({events: result});

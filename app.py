@@ -13,6 +13,7 @@ import json
 
 from model.event import Event
 from model.user import User
+from model.company import Company
 
 app = Flask(__name__)
 
@@ -54,25 +55,31 @@ def get_csrf():
 
 @app.route("/api/login", methods=["POST"])
 def login():
-    data = request.json
-    username = data.get("username")
-    password = data.get("password")
+    content = request.get_json(force=True)
+    print(content)
 
-    for user in users:
-        if user["username"] == username and user["password"] == password:
-            user_model = User()
-            user_model.id = user["id"]
-            login_user(user_model)
-            return jsonify({"login": True})
+    user_model = User.find_for_login(content.get('username'), content.get('password'))
+    login_user(user_model)
 
-    return jsonify({"login": False})
+    return jsonify({"login": True})
 
 
 @app.route("/api/data", methods=["GET"])
 @login_required
 def user_data():
-    user = get_user(current_user.id)
-    return jsonify({"username": user["username"]})
+    modal_id = current_user.id
+    user = User.find(modal_id)
+    print(user.to_dict())
+    return user.to_dict()
+
+
+@app.route("/api/user-role", methods=["GET"])
+@login_required
+def user_role():
+    modal_id = current_user.id
+    user_role = User.find(modal_id).role
+    print(user_role)
+    return jsonify({"role": user_role})
 
 
 @app.route("/api/getsession", methods=["GET"])
@@ -87,6 +94,7 @@ def check_session():
 @app.route("/api/logout")
 @login_required
 def logout():
+    print("I work indeed")
     logout_user()
     return jsonify({"logout": True})
 
@@ -97,7 +105,17 @@ def events_list():
         all_events.append(event)
     return jsonify(all_events)
 
-@app.route("/api/register", methods=['GET', 'POST'])
+@app.route("/api/list-users", methods=['GET'])
+def list_users():
+    event_id = request.args.get('event_id')
+
+    result = User.get_participants_names_sp(event_id)
+
+    print(result)
+
+    return jsonify(result)
+
+@app.route("/api/register", methods=['GET', 'POST', 'PATCH'])
 def register():
     content = request.get_json(force=True)
     
@@ -107,17 +125,26 @@ def register():
         User.registerVisitor(content.get('username'), content.get('password'), content.get('role'))
     elif content.get('role') == "participant":
         User.registerParticipant(content.get('username'), content.get('password'), content.get('role'), content.get('event'))
+        Event.add_participant(content.get('event'))
 
-    return content
+    return jsonify({"register": True})
 
 @app.route("/api/create-event", methods=['GET', 'POST'])
-def createEvent():
+def create_event():
     content = request.get_json(force=True)
     print(content)
 
-    Event.create(content.get('name'), 0)
+    Event.create(content.get('name'))
 
-    return content
+    return jsonify({"create": True})
+
+@app.route("/api/create-company", methods=['POST'])
+def create_company():
+    content = request.get_json(force=True)
+
+    Company.register(content.get('name'), content.get('event_id'))
+
+    return jsonify({"register": True})
 
 if __name__ == "__main__":
     app.run()

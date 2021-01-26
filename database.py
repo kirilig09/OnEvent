@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS events
     (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
-        count INTEGER
+        participants INT,
+        visitors INT
     )
 ''')
 conn.commit()
@@ -23,11 +24,23 @@ CREATE TABLE IF NOT EXISTS users
         password TEXT NOT NULL,
         role TEXT NOT NULL,
         event_id INTEGER,
-        FOREIGN KEY(event_id) REFERENCES events(id)
+        company_id INTEGER,
+        FOREIGN KEY(event_id) REFERENCES events(id),
+        FOREIGN KEY(company_id) REFERENCES companies(id)
     )
 ''')
 conn.commit()
 
+conn.cursor().execute('''
+CREATE TABLE IF NOT EXISTS companies
+    (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        event_id INTEGER,
+        FOREIGN KEY(event_id) REFERENCES events(id)
+    )
+''')
+conn.commit()
 
 class SQLite(object):
 

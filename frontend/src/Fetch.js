@@ -3,7 +3,7 @@ let isAuthenticated = false;
 
 const csrf = () => {
     console.log("uga buga");
-    fetch("http://127.0.0.1:5000/api/getcsrf", {
+    fetch("/api/getcsrf", {
         credentials: "include",
     })
     .then((res) => {
@@ -15,8 +15,12 @@ const csrf = () => {
     });
 };
 
+export const isLogged = () => {
+    return isAuthenticated
+}
+
 export const login = (username, password) => {
-    fetch("http://127.0.0.1:5000/api/login", {
+    fetch("/api/login", {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -38,26 +42,38 @@ export const login = (username, password) => {
 };
 
 export const whoami = () => {
-    fetch("http://127.0.0.1:5000/api/data", {
+    const user = fetch("/api/data", {
         method: "GET",
         headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrfToken,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken,
         },
         credentials: "include",
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-        alert(`Welcome, ${data.username}!`);
-    })
-    .catch((err) => {
-        console.log(err);
     });
+    console.log(JSON.stringify(user));
+    return user;
+};
+
+export const get_my_role = async () => {
+    const user_role = await fetch("/api/user-role", {
+        method: "GET",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        credentials: "include",
+    });
+    console.log(user_role);
+    return user_role;
 };
 
 export const logout = () => {
-    fetch("http://127.0.0.1:5000/api/logout", {
+    fetch("/api/logout", {
+        headers: {
+            "X-CSRFToken": csrfToken,
+        },
         credentials: "include",
     })
     .then(() => {
@@ -69,7 +85,7 @@ export const logout = () => {
 };
 
 export const register = (username, password, role, event) => {
-    fetch('http://127.0.0.1:5000/api/register', {
+    fetch('/api/register', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -81,7 +97,7 @@ export const register = (username, password, role, event) => {
 };
 
 export const create_event = (name) => {
-    fetch('http://127.0.0.1:5000/api/create-event', {
+    fetch('/api/create-event', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -92,10 +108,35 @@ export const create_event = (name) => {
     })
 };
 
+export const register_company = (name, event_id) => {
+    fetch('/api/create-company', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ name: name, event_id: event_id })
+    })
+}
+
+export const list_users = async (event_id) => {
+    const response = await fetch('/api/list-users?event_id='+event_id, {
+       method: 'GET',
+       headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+       }
+    })
+    console.log(response.json());
+    return response.json();
+};
+
 // Every time
 
 export const get_session = () => {
-    fetch("http://127.0.0.1:5000/api/getsession", {
+    fetch("/api/getsession", {
         credentials: "include",
     })
     .then((res) => res.json())

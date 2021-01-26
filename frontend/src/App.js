@@ -3,7 +3,9 @@ import Event from './Event.js';
 import EventRouter from './EventRouter.js';
 import Registration from './Registration.js';
 import Login from './Login';
+import LogSwitch from './LogSwitch'
 import './App.css';
+import {isLogged} from './Fetch';
 import {
   BrowserRouter as Router,
   Switch,
@@ -34,7 +36,7 @@ function App() {
           <Toolbar>
             <Link className={classes.link} color="inherit" component={RouterLink} to="/events">Events</Link>
             <Link className={classes.link} color="inherit" component={RouterLink} to="/registration">Register</Link>
-            <Link className={classes.link} color="inherit" component={RouterLink} to="/login">Log in</Link>
+            <Link className={classes.link} color="inherit" component={RouterLink} to="/login">Login/Logout</Link>
           </Toolbar>
         </AppBar>
         
@@ -46,7 +48,7 @@ function App() {
             <Registration user_role="visitor" event="" />
           </Route>
           <Route path="/login">
-            <Login user_role="visitor" event="" />
+            <LogSwitch />
           </Route>
         </Switch>
       </div>

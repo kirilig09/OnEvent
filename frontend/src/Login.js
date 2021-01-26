@@ -20,9 +20,7 @@ class Login extends React.Component {
         super(props);
         this.state = {
                 username: '',
-                password: '',
-                role: props.user_role,
-                event: props.event
+                password: ''
         };
 
         this.handleChangeU = this.handleChangeU.bind(this);
@@ -47,7 +45,7 @@ class Login extends React.Component {
                     <form noValidate autoComplete="off">
                         <TextField id="standard-basic" label="Username" value={this.state.username} onChange={this.handleChangeU} />
                         <br></br>
-                        <TextField id="standard-basic" label="Password" value={this.state.password} onChange={this.handleChangeP}/>
+                        <TextField id="standard-basic" label="Password" type="password" value={this.state.password} onChange={this.handleChangeP}/>
                     </form>
                     <br></br>
                     <div>

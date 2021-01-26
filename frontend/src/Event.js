@@ -1,5 +1,7 @@
 import React from 'react';
 import Registration from './Registration.js';
+import ListUsers from './ListUsers';
+import {get_my_role, whoami} from './Fetch';
 import {
     Button,
     Link
@@ -10,12 +12,19 @@ import {
     Route,
     Link as RouterLink
   } from 'react-router-dom';
+import CreateCompany from './CreateCompany.js';
 
 class Event extends React.Component {
+    
     render() {
+        const user_role = whoami().role;
+
         return (
             <div>
-                <p>Name: {this.props.event.name} | Visitors: {this.props.event.count}</p>
+                <div>
+                    <p>Name: {this.props.event.name} | Participants: {this.props.event.participants} | Visitors: {this.props.event.visitors}</p>
+                    <ListUsers event_id={this.props.event.id}/>
+                </div>
                 <Router>
                     <div>
                     {/* <Link color="inherit" component={RouterLink} to="/list">
@@ -24,6 +33,12 @@ class Event extends React.Component {
                     <Link color="inherit" component={RouterLink} to="/participate">
                         <Button color="primary" variant="outlined">Participate</Button>
                     </Link>
+                    {user_role == "participant" ? 
+                        <Link color="inherit" component={RouterLink} to="/register_company">
+                            <Button color="primary" variant="outlined">Register company</Button> 
+                        </Link> : 
+                        null
+                    }
                     
                     <Switch>
                         {/* <Route path="/list">
@@ -31,6 +46,9 @@ class Event extends React.Component {
                         </Route> */}
                         <Route path="/participate">
                             <Registration user_role="participant" event={this.props.event.id} />
+                        </Route>
+                        <Route path="/register_company">
+                            <CreateCompany event_id={this.props.event.id}/>
                         </Route>
                     </Switch>
                     </div>
