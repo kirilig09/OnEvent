@@ -37,6 +37,8 @@ cors = CORS(
     supports_credentials=True,
 )
 
+# User.registerVisitor("Test", "test", "visitor")
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.find(user_id)
@@ -109,7 +111,17 @@ def events_list():
 def list_users():
     event_id = request.args.get('event_id')
 
-    result = User.get_participants_names_sp(event_id)
+    result = User.get_participants_sp(event_id)
+
+    print(result)
+
+    return jsonify(result)
+
+@app.route("/api/list-companies", methods=['GET'])
+def list_companies():
+    event_id = request.args.get('event_id')
+
+    result = Company.get_companies_sp(event_id)
 
     print(result)
 
@@ -121,13 +133,20 @@ def register():
     
     print(content)
 
-    if content.get('role') == "visitor":
-        User.registerVisitor(content.get('username'), content.get('password'), content.get('role'))
-    elif content.get('role') == "participant":
-        User.registerParticipant(content.get('username'), content.get('password'), content.get('role'), content.get('event'))
-        Event.add_participant(content.get('event'))
+    User.registerVisitor(content.get('username'), content.get('password'))
 
     return jsonify({"register": True})
+
+@app.route("/api/register-participant", methods=['GET', 'POST'])
+def register_participant():
+    content = request.get_json(force=True)
+    print(content)
+
+    comp_id = Company.find_id(content.get('c_name'), content.get('c_password'), content.get('event'))
+    User.registerParticipant(content.get('username'), content.get('password'), content.get('event'), comp_id)
+    Event.add_participant(content.get('event'))
+
+    return jsonify({"register": True})   
 
 @app.route("/api/create-event", methods=['GET', 'POST'])
 def create_event():
@@ -142,8 +161,8 @@ def create_event():
 def create_company():
     content = request.get_json(force=True)
 
-    Company.register(content.get('name'), content.get('event_id'))
-
+    Company.register(content.get('name'), content.get('password'), content.get('image_link'), content.get('event_id'))
+    
     return jsonify({"register": True})
 
 if __name__ == "__main__":

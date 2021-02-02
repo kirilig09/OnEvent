@@ -30,8 +30,7 @@ class User(UserMixin):
                     (user_id,))
         user = result.fetchone()
         if user is None:
-            raise ApplicationError(
-                    "User with id {} not found".format(user_id), 404)
+            return None
         return User(*user)
 
     @staticmethod
@@ -64,23 +63,29 @@ class User(UserMixin):
 
 
 
-    def registerVisitor(name, password, role):
+    def registerVisitor(name, password):
         result = None
         query = "INSERT INTO users {} VALUES {}"
-        args = (name, password, role)
+        args = (name, password, "visitor")
         query = query.format("(name, password, role)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
 
-    def registerParticipant(name, password, role, event):
+    def registerParticipant(name, password, event, c_id):
         result = None
         query = "INSERT INTO users {} VALUES {}"
-        args = (name, password, role, event)
-        query = query.format("(name, password, role, event_id)", args)
+        args = (name, password, "participant", event, c_id)
+        query = query.format("(name, password, role, event_id, company_id)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
+
+    def bind_company(user_id, company_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("UPDATE users SET company_id = ? WHERE id = ?",
+                (company_id, user_id))
 
 
 
@@ -103,12 +108,12 @@ class User(UserMixin):
                     "SELECT * FROM users WHERE role = 'participant'").fetchall()
         return [User(*row).to_dict() for row in result]
 
-    def get_participants_names_sp(event_id):
+    def get_participants_sp(event_id):
         result = None
         with SQLite() as db:
-            result = db.execute("SELECT name FROM users WHERE event_id = ?",
+            result = db.execute("SELECT * FROM users WHERE event_id = ?",
                     (event_id,)).fetchall()
-        return [''.join(participant_name) for participant_name in result]
+        return [User(*row).to_dict() for row in result]
 
     def get_all_visitors():
         with SQLite() as db:

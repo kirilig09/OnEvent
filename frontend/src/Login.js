@@ -1,5 +1,5 @@
 import React from 'react';
-import {login} from './Fetch';
+import userContext from './userContext';
 import { 
     makeStyles,
     Button,
@@ -25,7 +25,6 @@ class Login extends React.Component {
 
         this.handleChangeU = this.handleChangeU.bind(this);
         this.handleChangeP = this.handleChangeP.bind(this);
-        this.saveCredentials = this.saveCredentials.bind(this);
     }
 
     handleChangeU(event) {
@@ -34,10 +33,6 @@ class Login extends React.Component {
     
     handleChangeP(event) {
         this.setState({password: event.target.value});
-    }
-    
-    saveCredentials() {
-        login(this.state.username, this.state.password);
     }
 
     render() {
@@ -49,7 +44,12 @@ class Login extends React.Component {
                     </form>
                     <br></br>
                     <div>
-                        <Button color="primary" variant="contained" onClick={this.saveCredentials}>Log in</Button>
+                        <userContext.Consumer>
+                            {({login_user}) => {
+                                    <Button color="primary" variant="contained" onClick={() => { login_user(this.state.username, this.state.password)}}>Log in</Button>
+                                }
+                            }
+                        </userContext.Consumer>
                     </div>
                 </div>
     }

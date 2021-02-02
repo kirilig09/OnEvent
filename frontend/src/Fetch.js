@@ -41,8 +41,8 @@ export const login = (username, password) => {
     });
 };
 
-export const whoami = () => {
-    const user = fetch("/api/data", {
+export const whoami = async() => {
+    const response = await fetch("/api/data", {
         method: "GET",
         headers: {
             "Accept": "application/json",
@@ -51,7 +51,8 @@ export const whoami = () => {
         },
         credentials: "include",
     });
-    console.log(JSON.stringify(user));
+    const user = await response.json();
+    console.log(user);
     return user;
 };
 
@@ -84,7 +85,7 @@ export const logout = () => {
     });
 };
 
-export const register = (username, password, role, event) => {
+export const register = (username, password) => {
     fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -92,9 +93,21 @@ export const register = (username, password, role, event) => {
             'Content-Type': 'application/json',
             "X-CSRFToken": csrfToken,
         },
-        body: JSON.stringify({ username: username, password: password, role: role, event: event })
+        body: JSON.stringify({ username: username, password: password })
     })
 };
+
+export const register_participant = (username, password, c_name, c_password, event) => {
+    fetch('/api/register-participant', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ username: username, password: password, company_name: c_name, company_password: c_password, event: event })
+    })
+}
 
 export const create_event = (name) => {
     fetch('/api/create-event', {
@@ -108,7 +121,7 @@ export const create_event = (name) => {
     })
 };
 
-export const register_company = (name, event_id) => {
+export const register_company = (name, password, image_link, event_id) => {
     fetch('/api/create-company', {
         method: 'POST',
         headers: {
@@ -116,7 +129,7 @@ export const register_company = (name, event_id) => {
             'Content-Type': 'application/json',
             "X-CSRFToken": csrfToken,
         },
-        body: JSON.stringify({ name: name, event_id: event_id })
+        body: JSON.stringify({ name: name, password: password, image_link: image_link, event_id: event_id })
     })
 }
 
@@ -129,8 +142,19 @@ export const list_users = async (event_id) => {
             "X-CSRFToken": csrfToken,
        }
     })
-    console.log(response.json());
-    return response.json();
+    return await response.json();
+};
+
+export const list_companies = async (event_id) => {
+    const response = await fetch('/api/list-companies?event_id='+event_id, {
+       method: 'GET',
+       headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+       }
+    });
+    return await response.json();
 };
 
 // Every time
@@ -143,11 +167,11 @@ export const get_session = () => {
     .then((data) => {
         console.log(data);
         if (data.login == true) {
-        isAuthenticated = true;
+            isAuthenticated = true;
         } else {
-        isAuthenticated = false;
-        csrf();
+            isAuthenticated = false;
         }
+        csrf();
     })
     .catch((err) => {
         console.log(err);

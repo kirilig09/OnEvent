@@ -1,6 +1,7 @@
 import React from 'react';
-import Registration from './Registration.js';
 import ListUsers from './ListUsers';
+import ListCopmanies from './ListCompanies';
+import ParticipantRegistration from './ParticRegistration';
 import {get_my_role, whoami} from './Fetch';
 import {
     Button,
@@ -15,15 +16,19 @@ import {
 import CreateCompany from './CreateCompany.js';
 
 class Event extends React.Component {
-    
+    async get_role() {
+
+    }
+
     render() {
-        const user_role = whoami().role;
+        const user_role = "visitor";
 
         return (
             <div>
                 <div>
                     <p>Name: {this.props.event.name} | Participants: {this.props.event.participants} | Visitors: {this.props.event.visitors}</p>
                     <ListUsers event_id={this.props.event.id}/>
+                    <ListCopmanies event_id={this.props.event_id}/>
                 </div>
                 <Router>
                     <div>
@@ -33,7 +38,7 @@ class Event extends React.Component {
                     <Link color="inherit" component={RouterLink} to="/participate">
                         <Button color="primary" variant="outlined">Participate</Button>
                     </Link>
-                    {user_role == "participant" ? 
+                    {user_role == "visitor" ? 
                         <Link color="inherit" component={RouterLink} to="/register_company">
                             <Button color="primary" variant="outlined">Register company</Button> 
                         </Link> : 
@@ -45,7 +50,7 @@ class Event extends React.Component {
                             <ListEvents />
                         </Route> */}
                         <Route path="/participate">
-                            <Registration user_role="participant" event={this.props.event.id} />
+                            <ParticipantRegistration event={this.props.event.id} />
                         </Route>
                         <Route path="/register_company">
                             <CreateCompany event_id={this.props.event.id}/>

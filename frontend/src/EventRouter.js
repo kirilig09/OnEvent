@@ -16,7 +16,7 @@ import {
 class EventRouter extends React.Component {
         
     render() {
-        const user_role = whoami().role;
+        const user_role = "admin";
 
         return <Router>
                     <div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {logout} from './Fetch';
+import userContext from './userContext';
 import { 
     makeStyles,
     Button,
@@ -13,20 +13,23 @@ import {
 //     },
 // }));
 
-class Logout extends React.Component {
+function Logout() {
     //const classes = useStyles();
 
     // handleButton() {
     //     logout()
     // }
 
-    render() {
-        return  <div>
-                    <div>
-                        <Button color="primary" variant="contained" onClick={logout}>Logout</Button>
-                    </div>
+    return  <div>
+                <div>
+                    <userContext.Consumer>
+                        {({logout_user}) => {
+                            <Button color="primary" variant="contained" onClick={() => {logout_user()}}>Logout</Button>
+                        }
+                        }
+                    </userContext.Consumer>
                 </div>
-    }
+            </div>
 }
 
 export default Logout;

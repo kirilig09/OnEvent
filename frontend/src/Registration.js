@@ -6,23 +6,13 @@ import {
     TextField
 } from '@material-ui/core';
 
-// const useStyles = makeStyles((theme) => ({
-//     textBox: {
-//         margin: "1.5em",
-//         width: '25ch'
-//     },
-// }));
-
 class Registration extends React.Component {
-    //const classes = useStyles();
 
     constructor(props) {
         super(props);
         this.state = {
                 username: '',
-                password: '',
-                role: props.user_role,
-                event: props.event
+                password: ''
         };
 
         this.handleChangeU = this.handleChangeU.bind(this);
@@ -39,7 +29,7 @@ class Registration extends React.Component {
     }
     
     saveCredentials() {
-        register(this.state.username, this.state.password, this.state.role, this.state.event);
+        register(this.state.username, this.state.password);
     }
 
     render() {

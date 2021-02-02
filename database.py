@@ -36,6 +36,8 @@ CREATE TABLE IF NOT EXISTS companies
     (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
+        password TEXT NOT NULL,
+        image_link TEXT,
         event_id INTEGER,
         FOREIGN KEY(event_id) REFERENCES events(id)
     )

@@ -25,7 +25,7 @@ class ListUsers extends React.Component {
                 <Button size="small" color="primary" variant="contained" onClick={() => {this.loadUsers()}}>View participants</Button>
                 <br></br>
                 {this.state.users.map((user) => {
-                    return <p>{user}</p>
+                    return <p>{user.name} | Representing {user.company}</p>
                 })}
                 <br></br>
             </div>
