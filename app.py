@@ -37,7 +37,8 @@ cors = CORS(
     supports_credentials=True,
 )
 
-# User.registerVisitor("Test", "test", "visitor")
+# User.registerVisitor("Test", "test")
+# User.registerAdmin("Admin", "admin")
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -120,6 +121,8 @@ def list_users():
 @app.route("/api/list-companies", methods=['GET'])
 def list_companies():
     event_id = request.args.get('event_id')
+
+    print(event_id)
 
     result = Company.get_companies_sp(event_id)
 

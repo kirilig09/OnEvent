@@ -2,7 +2,7 @@ import React from 'react';
 import ListUsers from './ListUsers';
 import ListCopmanies from './ListCompanies';
 import ParticipantRegistration from './ParticRegistration';
-import {get_my_role, whoami} from './Fetch';
+import userContext from './userContext';
 import {
     Button,
     Link
@@ -28,27 +28,33 @@ class Event extends React.Component {
                 <div>
                     <p>Name: {this.props.event.name} | Participants: {this.props.event.participants} | Visitors: {this.props.event.visitors}</p>
                     <ListUsers event_id={this.props.event.id}/>
-                    <ListCopmanies event_id={this.props.event_id}/>
+                    <ListCopmanies event_id={this.props.event.id}/>
                 </div>
                 <Router>
                     <div>
-                    {/* <Link color="inherit" component={RouterLink} to="/list">
-                        <Button color="primary" variant="outlined">Take a look</Button>
-                    </Link> */}
                     <Link color="inherit" component={RouterLink} to="/participate">
                         <Button color="primary" variant="outlined">Participate</Button>
                     </Link>
-                    {user_role == "visitor" ? 
+                    {/* {user_role == "visitor" ? 
                         <Link color="inherit" component={RouterLink} to="/register_company">
                             <Button color="primary" variant="outlined">Register company</Button> 
                         </Link> : 
                         null
-                    }
+                    } */}
+                    <userContext.Consumer>
+                        {({user}) => {
+                                if(user.role == "visitor") {
+                                    return(
+                                        <Link color="inherit" component={RouterLink} to="/register_company">
+                                            <Button color="primary" variant="outlined">Register company</Button> 
+                                        </Link>
+                                    );
+                                }
+                            }
+                        }
+                    </userContext.Consumer>
                     
                     <Switch>
-                        {/* <Route path="/list">
-                            <ListEvents />
-                        </Route> */}
                         <Route path="/participate">
                             <ParticipantRegistration event={this.props.event.id} />
                         </Route>

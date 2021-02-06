@@ -63,6 +63,15 @@ class User(UserMixin):
 
 
 
+    def registerAdmin(name, password):
+        result = None
+        query = "INSERT INTO users {} VALUES {}"
+        args = (name, password, "admin")
+        query = query.format("(name, password, role)", args)
+        print(query)
+        with SQLite() as db:
+            result = db.execute(query)
+
     def registerVisitor(name, password):
         result = None
         query = "INSERT INTO users {} VALUES {}"

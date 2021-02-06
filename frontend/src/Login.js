@@ -46,7 +46,9 @@ class Login extends React.Component {
                     <div>
                         <userContext.Consumer>
                             {({login_user}) => {
-                                    <Button color="primary" variant="contained" onClick={() => { login_user(this.state.username, this.state.password)}}>Log in</Button>
+                                    return (
+                                        <Button color="primary" variant="contained" onClick={() => { login_user(this.state.username, this.state.password)}}>Log in</Button>
+                                    );
                                 }
                             }
                         </userContext.Consumer>

@@ -24,7 +24,9 @@ function Logout() {
                 <div>
                     <userContext.Consumer>
                         {({logout_user}) => {
-                            <Button color="primary" variant="contained" onClick={() => {logout_user()}}>Logout</Button>
+                            return (
+                                <Button color="primary" variant="contained" onClick={() => {logout_user()}}>Logout</Button>
+                            );
                         }
                         }
                     </userContext.Consumer>

@@ -1,4 +1,5 @@
 import React from 'react';
+import ViewCompany from './ViewCompany';
 import {list_companies} from './Fetch';
 import {
     Button
@@ -25,7 +26,8 @@ class ListCompanies extends React.Component {
                 <Button size="small" color="primary" variant="contained" onClick={() => {this.loadCompanies()}}>Take a look</Button>
                 <br></br>
                 {this.state.companies.map((company) => {
-                    return <p>{company.name}</p>
+                    // return <p> Company name: {company.name}</p>
+                    return <ViewCompany company={company}/>
                 })}
                 <br></br>
             </div>

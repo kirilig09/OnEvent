@@ -46,4 +46,4 @@ class Company():
         with SQLite() as db:
             result = db.execute("SELECT * FROM companies WHERE event_id = ?",
                     (event_id,)).fetchall()
-        return [Copmany(*row).to_dict() for row in result]
+        return [Company(*row).to_dict() for row in result]

@@ -1,7 +1,7 @@
 import React from 'react';
 import ListEvents from './ListEvents.js';
 import CreateEvent from './CreateEvent.js';
-import {whoami} from './Fetch';
+import userContext from './userContext';
 import {
     Button,
     Link
@@ -23,13 +23,19 @@ class EventRouter extends React.Component {
                     <Link color="inherit" component={RouterLink} to="/list">
                         <Button color="primary" variant="contained">List events</Button>
                     </Link>
-                    <Link color="inherit" component={RouterLink} to="/create">
-                        {user_role == "admin" ? 
-                            <Button color="primary" variant="contained">Create event</Button> :
-                            null
+                    <userContext.Consumer>
+                        {({user}) => {
+                            if(user.role == "admin") {
+                                return (
+                                        <Link color="inherit" component={RouterLink} to="/create">
+                                            <Button color="primary" variant="contained">Create event</Button>
+                                        </Link>
+                                    );
+                                }
+                            }
                         }
+                    </userContext.Consumer>
                         
-                    </Link>
                     <br></br>
                     
                     <Switch>

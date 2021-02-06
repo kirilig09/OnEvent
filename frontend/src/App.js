@@ -1,6 +1,7 @@
 import React from 'react';
 import LogForm from './LogForm';
 import Main from './Main';
+import EventRouter from './EventRouter';
 import Logout from './Logout';
 import {login, logout, whoami} from './Fetch';
 import './App.css';
@@ -41,11 +42,13 @@ class App extends React.Component {
     await login(username, password);
     const user = await whoami();
     this.setState({user: user});
+    console.log(this.state.user);
   }
 
   async logout_user() {
     await logout();
     this.setState({user: {}});
+    console.log(this.state.user);
   }
 
   render () {
@@ -61,7 +64,7 @@ class App extends React.Component {
                   <AppBar position="static">
                     <Toolbar>
                       <Link color="inherit" component={RouterLink} to="/log-form">LoginForm</Link>
-                      <Link color="inherit" component={RouterLink} to="/main">Main</Link>
+                      <Link color="inherit" component={RouterLink} to="/list-events">View events</Link>
                       <Link color="inherit" component={RouterLink} to="/logout">Log out</Link>
                     </Toolbar>
                   </AppBar>
@@ -70,8 +73,8 @@ class App extends React.Component {
                       <Route path="/log-form">
                           <LogForm />
                       </Route>
-                      <Route path="/main">
-                        <Main />
+                      <Route path="/list-events">
+                        <EventRouter />
                       </Route>
                       <Route path="/logout">
                         <Logout />
