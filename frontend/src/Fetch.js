@@ -157,6 +157,20 @@ export const list_companies = async (event_id) => {
     return await response.json();
 };
 
+export const get_participant_company = async (user_id) => {
+    const response = await fetch('/api/get-company?user_id='+user_id, {
+       method: 'GET',
+       headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+       }
+    });
+    const company =  await response.json();
+    console.log(company);
+    return company;
+};
+
 // Every time
 
 export const get_session = () => {

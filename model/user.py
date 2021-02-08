@@ -61,6 +61,14 @@ class User(UserMixin):
                     "User with name {} not found".format(name), 404)
         return User(*user)
 
+    @staticmethod
+    def find_company_id(user_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT company_id FROM users WHERE id = ?",
+            (user_id,)).fetchone()
+        return result[0]
+
 
 
     def registerAdmin(name, password):

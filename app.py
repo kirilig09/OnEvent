@@ -121,14 +121,22 @@ def list_users():
 @app.route("/api/list-companies", methods=['GET'])
 def list_companies():
     event_id = request.args.get('event_id')
-
     print(event_id)
 
     result = Company.get_companies_sp(event_id)
-
     print(result)
 
     return jsonify(result)
+
+@app.route("/api/get-company", methods=['GET'])
+def get_company():
+    user_id = request.args.get('user_id')
+    print(user_id)
+
+    company_id = User.find_company_id(user_id)
+    company = Company.get_company(company_id)
+    print(company.to_dict())
+    return company.to_dict()
 
 @app.route("/api/register", methods=['GET', 'POST', 'PATCH'])
 def register():
@@ -145,7 +153,7 @@ def register_participant():
     content = request.get_json(force=True)
     print(content)
 
-    comp_id = Company.find_id(content.get('c_name'), content.get('c_password'), content.get('event'))
+    comp_id = Company.find_id(content.get('company_name'), content.get('company_password'), content.get('event'))
     User.registerParticipant(content.get('username'), content.get('password'), content.get('event'), comp_id)
     Event.add_participant(content.get('event'))
 

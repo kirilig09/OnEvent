@@ -27,6 +27,7 @@ class ListCompanies extends React.Component {
                 <br></br>
                 {this.state.companies.map((company) => {
                     // return <p> Company name: {company.name}</p>
+                    console.log(company);
                     return <ViewCompany company={company}/>
                 })}
                 <br></br>

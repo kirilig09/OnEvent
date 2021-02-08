@@ -1,9 +1,9 @@
 import React from 'react';
 import LogForm from './LogForm';
-import Main from './Main';
+import ViewCompany from './ViewCompany';
 import EventRouter from './EventRouter';
 import Logout from './Logout';
-import {login, logout, whoami} from './Fetch';
+import {login, logout, whoami, get_participant_company} from './Fetch';
 import './App.css';
 import userContext from './userContext';
 import {
@@ -19,6 +19,7 @@ import {
   Link,
   makeStyles
 } from '@material-ui/core';
+import ParseCompId from './ParseCompId';
 
 // const useStyles = makeStyles((theme) => ({
 //   link: {
@@ -51,6 +52,11 @@ class App extends React.Component {
     console.log(this.state.user);
   }
 
+  async render_participant_company() {
+    const company = await get_participant_company(this.state.user.id);
+    return company;
+  }
+
   render () {
     const context_value = {
       user: this.state.user,
@@ -58,14 +64,21 @@ class App extends React.Component {
       logout_user: this.logout_user
     }
 
-    return <userContext.Provider value={context_value}>
+    return  <userContext.Provider value={context_value}>
               <Router>
                 <div>
                   <AppBar position="static">
                     <Toolbar>
                       <Link color="inherit" component={RouterLink} to="/log-form">LoginForm</Link>
-                      <Link color="inherit" component={RouterLink} to="/list-events">View events</Link>
+                      {this.state.user.role == "participant" ?
+                        <Link color="inherit" component={RouterLink} to={"view-company/"+this.state.user.id}>My Company</Link> :
+                        <Link color="inherit" component={RouterLink} to="/list-events">View events</Link>
+                      }
+                      
                       <Link color="inherit" component={RouterLink} to="/logout">Log out</Link>
+                      <div>
+                        <p>[Username: {this.state.user.name}]</p>
+                      </div>
                     </Toolbar>
                   </AppBar>
                   
@@ -73,9 +86,14 @@ class App extends React.Component {
                       <Route path="/log-form">
                           <LogForm />
                       </Route>
-                      <Route path="/list-events">
-                        <EventRouter />
-                      </Route>
+                      {this.state.user.role == "participant" ?
+                        <Route path="/view-company/:user_id">
+                          <ParseCompId />
+                        </Route> :
+                        <Route path="/list-events">
+                          <EventRouter />
+                        </Route>
+                      }
                       <Route path="/logout">
                         <Logout />
                       </Route>

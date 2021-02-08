@@ -47,3 +47,12 @@ class Company():
             result = db.execute("SELECT * FROM companies WHERE event_id = ?",
                     (event_id,)).fetchall()
         return [Company(*row).to_dict() for row in result]
+
+    @staticmethod
+    def get_company(company_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM companies WHERE id = ?",
+            (company_id,))
+        company = result.fetchone()
+        return Company(*company)
