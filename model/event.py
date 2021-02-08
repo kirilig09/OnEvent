@@ -2,11 +2,12 @@ from database import SQLite
 
 class Event():
 
-    def __init__(self, id, name, participants, visitors):
+    def __init__(self, id, name, participants, visitors, status):
         self.id = id
         self.name = name
         self.participants = participants
         self.visitors = visitors
+        self.status = status
 
     def to_dict(self):
         event_data = self.__dict__
@@ -22,8 +23,8 @@ class Event():
     def create(name):
         result = None
         query = "INSERT INTO events {} VALUES {}"
-        args = (name, 0, 0)
-        query = query.format("(name, participants, visitors)", args)
+        args = (name, 0, 0, "active")
+        query = query.format("(name, participants, visitors, status)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
@@ -47,6 +48,31 @@ class Event():
                     (event_id, "visitor")).fetchone()
             result = db.execute("UPDATE events SET visitors = ? WHERE id = ?",
                     (count[0], event_id))
+
+
+
+    @staticmethod
+    def deactivate(event_id):
+        with SQLite() as db:
+            result = db.execute("UPDATE events SET status = ? WHERE id = ?",
+                    ("inactive", event_id))
+
+
+
+    @staticmethod
+    def get_all_active():
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM events WHERE status = ?",
+                    ("active",)).fetchall()
+        return [Event(*row).to_dict() for row in result]
+
+    @staticmethod
+    def get_all_inactive():
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM events WHERE status = ?",
+                    ("inactive",)).fetchall()
+        return [Event(*row).to_dict() for row in result]
+
 
     @staticmethod
     def all_names():

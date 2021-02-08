@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS events
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
         participants INT,
-        visitors INT
+        visitors INT,
+        status TEXT NOT NULL
     )
 ''')
 conn.commit()

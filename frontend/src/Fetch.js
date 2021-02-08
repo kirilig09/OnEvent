@@ -133,6 +133,18 @@ export const register_company = (name, password, image_link, event_id) => {
     })
 }
 
+export const list_active_events = async () => {
+    const response = await fetch('/api/list-active-events', {
+        method: 'GET',
+        headers: {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+             "X-CSRFToken": csrfToken,
+        }
+     });
+     return await response.json();
+}
+
 export const list_users = async (event_id) => {
     const response = await fetch('/api/list-users?event_id='+event_id, {
        method: 'GET',
@@ -170,6 +182,18 @@ export const get_participant_company = async (user_id) => {
     console.log(company);
     return company;
 };
+
+export const deactivate_event = async (event_id) => {
+    fetch("/api/deactivate-event", {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ event_id: event_id})
+    });
+}
 
 // Every time
 

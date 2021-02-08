@@ -1,5 +1,6 @@
 import React from 'react';
 import Event from './Event.js';
+import {list_active_events} from './Fetch';
 import {
     Button
 } from '@material-ui/core'
@@ -14,10 +15,9 @@ class ListEvents extends React.Component {
     }
     
     async loadEvents() {
-        const response = await fetch('/api/events');
-        const result = await response.json();
-        console.log(result);
-        this.setState({events: result});
+        const events_list = await list_active_events();
+        console.log(events_list);
+        this.setState({events: events_list});
     }
 
     render() {

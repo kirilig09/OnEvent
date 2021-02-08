@@ -20,7 +20,7 @@ class LogForm extends React.Component {
         return <Router>
                     <div>
                         <Link color="inherit" component={RouterLink} to="/registration">
-                            <Button color="primary" variant="contained">Register</Button>
+                            <Button color="primary" variant="contained">Register as visitor</Button>
                         </Link>
                         <Link color="inherit" component={RouterLink} to="/login">
                             <Button color="primary" variant="contained">Login</Button>

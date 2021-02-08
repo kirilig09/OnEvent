@@ -37,7 +37,6 @@ cors = CORS(
     supports_credentials=True,
 )
 
-# User.registerVisitor("Test", "test")
 # User.registerAdmin("Admin", "admin")
 
 @login_manager.user_loader
@@ -101,12 +100,10 @@ def logout():
     logout_user()
     return jsonify({"logout": True})
 
-@app.route("/api/events", methods=['GET'])
+@app.route("/api/list-active-events", methods=['GET'])
 def events_list():
-    all_events = []
-    for event in Event.all():
-        all_events.append(event)
-    return jsonify(all_events)
+    active_events = Event.get_all_active()
+    return jsonify(active_events)
 
 @app.route("/api/list-users", methods=['GET'])
 def list_users():
@@ -167,6 +164,15 @@ def create_event():
     Event.create(content.get('name'))
 
     return jsonify({"create": True})
+
+@app.route("/api/deactivate-event", methods=['PATCH'])
+def deactivate_event():
+    content = request.get_json(force=True)
+    print(content)
+
+    Event.deactivate(content.get('event_id'))
+
+    return jsonify({"deactivate": True})
 
 @app.route("/api/create-company", methods=['POST'])
 def create_company():

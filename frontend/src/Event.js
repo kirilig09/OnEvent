@@ -1,6 +1,7 @@
 import React from 'react';
 import ListUsers from './ListUsers';
 import ListCopmanies from './ListCompanies';
+import DeactivateEvent from './DeactivateEvent';
 import ParticipantRegistration from './ParticRegistration';
 import userContext from './userContext';
 import {
@@ -16,13 +17,8 @@ import {
 import CreateCompany from './CreateCompany.js';
 
 class Event extends React.Component {
-    async get_role() {
-
-    }
 
     render() {
-        const user_role = "visitor";
-
         return (
             <div>
                 <div>
@@ -30,17 +26,26 @@ class Event extends React.Component {
                     <ListUsers event_id={this.props.event.id}/>
                     <ListCopmanies event_id={this.props.event.id}/>
                 </div>
+
+                <div>
+                    <userContext.Consumer>
+                        {({user}) => {
+                                if(user.role == "admin") {
+                                    return(
+                                        <DeactivateEvent event_id={this.props.event.id} />
+                                    );
+                                }
+                            }
+                        }
+                    </userContext.Consumer>
+                </div>
+
                 <Router>
                     <div>
                     <Link color="inherit" component={RouterLink} to="/participate">
                         <Button color="primary" variant="outlined">Participate</Button>
                     </Link>
-                    {/* {user_role == "visitor" ? 
-                        <Link color="inherit" component={RouterLink} to="/register_company">
-                            <Button color="primary" variant="outlined">Register company</Button> 
-                        </Link> : 
-                        null
-                    } */}
+                    
                     <userContext.Consumer>
                         {({user}) => {
                                 if(user.role == "visitor") {
