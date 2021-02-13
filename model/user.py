@@ -16,8 +16,8 @@ class User(UserMixin):
             self.role = role
 
     def to_dict(self):
-        event_data = self.__dict__
-        return event_data
+        user_data = self.__dict__
+        return user_data
 
 
 

@@ -20,6 +20,10 @@ class ListEvents extends React.Component {
         this.setState({events: events_list});
     }
 
+    async componentDidMount() {
+        await this.loadEvents();
+    }
+
     render() {
         return (
             <div>

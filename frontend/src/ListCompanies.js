@@ -26,7 +26,6 @@ class ListCompanies extends React.Component {
                 <Button size="small" color="primary" variant="contained" onClick={() => {this.loadCompanies()}}>Take a look</Button>
                 <br></br>
                 {this.state.companies.map((company) => {
-                    // return <p> Company name: {company.name}</p>
                     console.log(company);
                     return <ViewCompany company={company}/>
                 })}

@@ -10,8 +10,8 @@ class Company():
         self. event = event
 
     def to_dict(self):
-        event_data = self.__dict__
-        return event_data
+        company_data = self.__dict__
+        return company_data
 
 
 

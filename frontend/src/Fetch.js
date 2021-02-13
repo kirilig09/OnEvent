@@ -183,6 +183,20 @@ export const get_participant_company = async (user_id) => {
     return company;
 };
 
+export const load_messages = async (company_id) => {
+    const response = await fetch("/api/load-messages?company_id="+company_id, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        }
+    });
+    const chat = await response.json();
+    console.log(chat);
+    return chat;
+}
+
 export const deactivate_event = async (event_id) => {
     fetch("/api/deactivate-event", {
         method: 'PATCH',
@@ -195,23 +209,50 @@ export const deactivate_event = async (event_id) => {
     });
 }
 
+export const send_message = async (content, sender_id, company_id) => {
+    fetch("/api/send-message", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ content: content, sender_id: sender_id, company_id: company_id})
+    });
+}
+
+export const get_user = async (user_id) => {
+    const response = await fetch("/api/get-user?user_id="+user_id, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        }
+    });
+    const user = await response.json();
+    console.log(user);
+    return user;
+}
+
 // Every time
 
-export const get_session = () => {
-    fetch("/api/getsession", {
-        credentials: "include",
-    })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log(data);
-        if (data.login == true) {
-            isAuthenticated = true;
-        } else {
-            isAuthenticated = false;
+export const get_session = async () => {
+    const response = await fetch("/api/getsession", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
         }
-        csrf();
     })
-    .catch((err) => {
-        console.log(err);
-    });
+    const session = response.json();
+    console.log(session.login);
+    if(session.login == true) {
+        isAuthenticated = true;
+    } else {
+        isAuthenticated = false;
+    }
+    csrf();
+    return session;
 }

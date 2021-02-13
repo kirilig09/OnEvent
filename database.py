@@ -45,6 +45,19 @@ CREATE TABLE IF NOT EXISTS companies
 ''')
 conn.commit()
 
+conn.cursor().execute('''
+CREATE TABLE IF NOT EXISTS messages
+    (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        content TEXT NOT NULL,
+        sender_id INTEGER,
+        company_id INTEGER,
+        FOREIGN KEY(sender_id) REFERENCES users(id),
+        FOREIGN KEY(company_id) REFERENCES companies(id)
+    )
+''')
+conn.commit()
+
 class SQLite(object):
 
     def __enter__(self):

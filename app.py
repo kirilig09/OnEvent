@@ -14,6 +14,7 @@ import json
 from model.event import Event
 from model.user import User
 from model.company import Company
+from model.message import Message
 
 app = Flask(__name__)
 
@@ -135,6 +136,16 @@ def get_company():
     print(company.to_dict())
     return company.to_dict()
 
+@app.route("/api/load-messages", methods=['GET'])
+def load_messages():
+    company_id = request.args.get('company_id')
+    print(company_id)
+
+    company_chat = Message.load_messages_for(company_id)
+    print(company_chat)
+
+    return jsonify(company_chat)
+
 @app.route("/api/register", methods=['GET', 'POST', 'PATCH'])
 def register():
     content = request.get_json(force=True)
@@ -181,6 +192,22 @@ def create_company():
     Company.register(content.get('name'), content.get('password'), content.get('image_link'), content.get('event_id'))
     
     return jsonify({"register": True})
+
+@app.route("/api/send-message", methods=['POST'])
+def send_message():
+    content = request.get_json(force=True)
+
+    Message.send_message(content.get('content'), content.get('sender_id'), content.get('company_id'))
+
+    return jsonify({"message_sent": True})
+
+@app.route("/api/get-user", methods=['GET'])
+def get_user():
+    user_id = request.args.get('user_id')
+
+    user = Use.find(user_id)
+
+    return jsonify(user.to_dict())
 
 if __name__ == "__main__":
     app.run()

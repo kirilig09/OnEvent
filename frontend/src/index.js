@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 import {get_session} from './Fetch';
 
-get_session();
+// get_session();
 
 ReactDOM.render(
   <React.StrictMode>

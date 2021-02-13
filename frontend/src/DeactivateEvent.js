@@ -11,7 +11,8 @@ class DeactivateEvent extends React.Component {
 
     render() {
         return  <div>
-                    <Button color="primary" variant="contained" onClick={deactivate_event(this.props.event_id)}>Deactivate</Button>
+                    <Button color="primary" variant="contained" onClick={() => {deactivate_event(this.props.event_id)}}>Deactivate</Button>
+                    <br></br>
                 </div>
     }
 }
