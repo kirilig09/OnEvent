@@ -19,18 +19,13 @@ class LoadChat extends React.Component {
         this.setState({chat: chat});
     }
 
-    async componentDidMount() {
-        await this.load_chat();
-    }
-
     render() {
         return  <div>
-                    <Button size="small" color="primary" variant="contained" onClick={() => {this.load_chat()}}>Open chat</Button>
+                    <Button size="small" color="primary" variant="contained" onClick={() => {this.load_chat()}}>Load chat</Button>
                     <br></br>
                     {this.state.chat.map((message) => {
-                        return <ViewMessage message={message}/>
+                        return <ViewMessage message={message} company_id={this.props.company_id}/>
                     })}
-                    <br></br>
                     <SendMessage company_id={this.props.company_id}/>
                 </div>
     }

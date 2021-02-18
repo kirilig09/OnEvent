@@ -43,9 +43,9 @@ class Event():
     def add_visitor(event_id):
         result = None
         count = None
-        with SQLit() as db:
-            count = db.execute("SELECT COUNT(id) FROM users WHERE event_id = ? AND role = ?",
-                    (event_id, "visitor")).fetchone()
+        with SQLite() as db:
+            count = db.execute("SELECT COUNT(visitors) FROM events WHERE id = ?",
+                    (event_id,)).fetchone()
             result = db.execute("UPDATE events SET visitors = ? WHERE id = ?",
                     (count[0], event_id))
 

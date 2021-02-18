@@ -235,6 +235,18 @@ export const get_user = async (user_id) => {
     return user;
 }
 
+export const update_image = async (company_id, new_image) => {
+    fetch("/api/update-image", {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ company_id: company_id, new_image: new_image })
+    });
+}
+
 // Every time
 
 export const get_session = async () => {

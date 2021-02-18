@@ -1,5 +1,6 @@
 import React from 'react';
 import LoadChat from './LoadChat';
+import EditCompanyRouter from './EditCompanyRouter';
 import {
     Card,
     CardMedia,
@@ -7,6 +8,7 @@ import {
     Button,
 
 } from '@material-ui/core'
+import userContext from './userContext';
 
 class ViewCompany extends React.Component {
     constructor(props) {
@@ -32,7 +34,21 @@ class ViewCompany extends React.Component {
                         </CardContent>
                     </Card>
                     <br></br>
-                    <LoadChat company_id={this.props.company.id}/>
+                    <div>
+                        <LoadChat company_id={this.props.company.id}/>
+                        <br></br>
+                        <userContext.Consumer>
+                            {({user}) => {
+                                if(user.company == this.props.company.id) {
+                                    return  <div>
+                                                <h2>Edit company:</h2>
+                                                <EditCompanyRouter company={this.props.company} />
+                                            </div>
+                                }
+                            }
+                            }
+                        </userContext.Consumer>
+                    </div>
                 </div>
     }
 }

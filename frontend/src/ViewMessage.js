@@ -32,18 +32,18 @@ class ViewMessage extends React.Component {
                                 </Box>
                             );
                         }
-                        // else if(this.props.message.sender_id == "participant") {
-                        //     return (
-                        //         <Box bgcolor="text.disabled" color="background.paper">
-                        //             <h4> User: {this.props.message.sender_id} </h4>
-                        //             <p> {this.props.message.content} </p>
-                        //         </Box>
-                        //     );
-                        // }
+                        else if(this.state.user.company == this.props.company_id) {
+                            return (
+                                <Box bgcolor="secondary.main" color="secondary.contrastText">
+                                    <h4> User: {this.state.user.name} </h4>
+                                    <p> {this.props.message.content} </p>
+                                </Box>
+                            );
+                        }
                         else {
                             return (
                                 <Box bgcolor="text.disabled" color="background.paper">
-                                    <h4> User: {this.props.message.sender_id} </h4>
+                                    <h4> User: {this.state.user.name} </h4>
                                     <p> {this.props.message.content} </p>
                                 </Box>
                             );

@@ -56,3 +56,12 @@ class Company():
             (company_id,))
         company = result.fetchone()
         return Company(*company)
+
+
+
+    @staticmethod
+    def change_image(company_id, new_image):
+        result = None
+        with SQLite() as db:
+            result = db.execute("UPDATE companies SET image_link = ? WHERE id = ?",
+                    (new_image, company_id))

@@ -2,6 +2,7 @@ import React from 'react';
 import Login from './Login';
 import Registration from './Registration';
 import EventRouter from './EventRouter';
+import ListEvents from  './ListEvents';
 import Logout from './Logout';
 import {
   login, 
@@ -105,7 +106,7 @@ class App extends React.Component {
     }
 
     return  <userContext.Provider value={context_value}>
-                <div>
+              <div>
                 <Router>
                   <AppBar position="static">
                     <Toolbar>
@@ -157,9 +158,7 @@ class App extends React.Component {
                       <div>
                         <p>[Username: {this.state.user.name}]</p>
                       </div>
-                      <div>
-                        <Button color="secondary" variant="outlined" onClick={this.forceUpdateHandle}>Updat State</Button>
-                      </div>
+      
                     </Toolbar>
                   </AppBar>
                 
@@ -168,14 +167,14 @@ class App extends React.Component {
 
                     {this.state.session == false ?
                       <div>
-                        <Route to="/register">
+                        <Route path="/register">
                           <Registration />
                         </Route>
-                        <Route to="/login">
+                        <Route path="/login">
                           <Login />
                         </Route> 
                       </div> :
-                      <Route to="/logout">
+                      <Route path="/logout">
                         <Logout />
                       </Route>
                     }
@@ -196,12 +195,12 @@ class App extends React.Component {
                       </Route> :
                       null
                     }
-                    {/* {this.state.user.role == "visitor" || this.state.user.role == "admin" ? */}
+                    {this.state.user.role == "visitor" || this.state.user.role == "admin" ?
                       <Route path="/list-events">
                         <EventRouter />
-                      </Route>
-                      {/* null
-                    } */}
+                      </Route> :
+                      null
+                    }
 
                     {/* <Route path="/view-company/:user_id">
                       <ParseCompId />
@@ -211,8 +210,8 @@ class App extends React.Component {
                     </Route> */}
 
                   </Switch>
-              </Router>
-                </div>
+                </Router>
+              </div>
             </userContext.Provider>
   }
 }

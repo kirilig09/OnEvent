@@ -1,5 +1,6 @@
 import React from 'react';
 import Event from './Event.js';
+import ParticipantsPerEventChart from './ParticipantsPerEventChart';
 import {list_active_events} from './Fetch';
 import {
     Button
@@ -10,7 +11,7 @@ class ListEvents extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-                events:[]
+                events: []
         };
     }
     
@@ -33,6 +34,12 @@ class ListEvents extends React.Component {
                 {this.state.events.map((event) => {
                     return <Event event={event}></Event>
                 })}
+                {this.state.events.length > 0 ?
+                    <div>
+                        <ParticipantsPerEventChart events={this.state.events} /> 
+                    </div> :
+                    null
+                }
             </div>
         );
     }

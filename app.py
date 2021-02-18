@@ -121,6 +121,8 @@ def list_companies():
     event_id = request.args.get('event_id')
     print(event_id)
 
+    Event.add_visitor(event_id)
+
     result = Company.get_companies_sp(event_id)
     print(result)
 
@@ -205,9 +207,17 @@ def send_message():
 def get_user():
     user_id = request.args.get('user_id')
 
-    user = Use.find(user_id)
+    user = User.find(user_id)
 
     return jsonify(user.to_dict())
+
+@app.route("/api/update-image", methods=['PATCH'])
+def update_image():
+    content = request.get_json(force=True)
+
+    Company.change_image(content.get('company_id'), content.get('new_image'))
+
+    return jsonify({"new_image": content.get('new_image')})
 
 if __name__ == "__main__":
     app.run()
