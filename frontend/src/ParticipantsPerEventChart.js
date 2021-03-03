@@ -1,54 +1,40 @@
 import React from 'react';
-import {Chart} from 'react-charts';
+import {BarChart, 
+    Bar, 
+    Cell, 
+    XAxis, 
+    YAxis, 
+    CartesianGrid, 
+    Tooltip, 
+    Legend
+} from 'recharts';
 
-export default function ParticipantsPerEventChart(props) {
-    let dataArr = [];
-    for(var i = 0; i < props.events.length; i++) {
-        dataArr.push({ primary: props.events[i].name, secondary: props.events[i].participants});
+class UsersPerEventChart extends React.Component {
+    constructor(props) {
+        super(props);
     }
-    
-    // secondary: props.events[i].participants
 
-    console.log(dataArr);
-
-    const parseData = React.useMemo(
-        () => [
-            {
-                label: "Participants",
-                data: dataArr,
-                dataType: "ordinal",
-            },
-        ],
-        []
-    )
-
-    const series = React.useMemo(
-        () => ({
-            type: "bar"
-        }),
-        []
-    )
-
-    console.log(parseData);
-
-    const axes = React.useMemo(
-        () => [
-            { primary: true, type: 'ordinal', position: 'bottom' },
-            { type: 'linear', position: 'left', stacked: false, show: false },
-        ],
-        []
-    )
-
-    console.log(axes);
-
-    return (
-        <div
-            style={{
-                width: '400px',
-                height: '300px',
-            }}
-        >
-            <Chart data={parseData} series={series} axes={axes} />
-        </div>
-    );
+    render() {
+        return  <BarChart
+                    width={500}
+                    height={300}
+                    data={this.props.events}
+                    margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                    }}
+                >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="participants" fill="#8884d8" />
+                    <Bar dataKey="visitors" fill="#82ca9d" />
+                </BarChart>
+    }
 }
+
+export default UsersPerEventChart;

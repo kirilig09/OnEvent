@@ -2,6 +2,7 @@ import React from 'react';
 import ListEvents from './ListEvents.js';
 import CreateEvent from './CreateEvent.js';
 import userContext from './userContext';
+import EventsArchive from './EventsArchive';
 import {
     Button,
     Link
@@ -25,9 +26,14 @@ class EventRouter extends React.Component {
                         {({user}) => {
                             if(user.role == "admin") {
                                 return (
+                                    <div>
+                                        <Link color="inherit" component={RouterLink} to="/archive">
+                                            <Button color="primary" variant="contained">Events archive</Button>
+                                        </Link>
                                         <Link color="inherit" component={RouterLink} to="/create">
                                             <Button color="primary" variant="contained">Create event</Button>
                                         </Link>
+                                    </div>
                                     );
                                 }
                             }
@@ -42,6 +48,9 @@ class EventRouter extends React.Component {
                         </Route>
                         <Route path="/create">
                             <CreateEvent />
+                        </Route>
+                        <Route path="/archive">
+                            <EventsArchive />
                         </Route>
                     </Switch>
                     </div>

@@ -104,6 +104,12 @@ class User(UserMixin):
             result = db.execute("UPDATE users SET company_id = ? WHERE id = ?",
                 (company_id, user_id))
 
+    def join_event(user_id, event_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("UPDATE users SET event_id = ? WHERE id =?",
+                (event_id, user_id))
+
 
 
     @staticmethod
@@ -128,8 +134,8 @@ class User(UserMixin):
     def get_participants_sp(event_id):
         result = None
         with SQLite() as db:
-            result = db.execute("SELECT * FROM users WHERE event_id = ?",
-                    (event_id,)).fetchall()
+            result = db.execute("SELECT * FROM users WHERE event_id = ? AND role = ?",
+                    (event_id, "participant")).fetchall()
         return [User(*row).to_dict() for row in result]
 
     def get_all_visitors():
@@ -137,6 +143,21 @@ class User(UserMixin):
             result = db.execute(
                     "SELECT * FROM users WHERE role = 'visitor'").fetchall()
         return [User(*row).to_dict() for row in result]
+
+    def get_visitors_sp(event_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM users WHERE event_id = ? AND role = ?",
+                    (event_id, "visitor")).fetchall()
+        return [User(*row).to_dict() for row in result]
+
+    def count_visitors_sp(event_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT COUNT(id) FROM users WHERE event_id = ? AND role = ?",
+                    (event_id, "visitor")).fetchone()
+        return result[0]
+
 
     # @staticmethod
     # def __get_save_query(self):

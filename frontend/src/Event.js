@@ -17,6 +17,9 @@ import {
 import CreateCompany from './CreateCompany.js';
 
 class Event extends React.Component {
+    constructor(props) {
+        super(props);
+    }
 
     render() {
         return (
@@ -24,7 +27,22 @@ class Event extends React.Component {
                 <div>
                     <p>Name: {this.props.event.name} | Participants: {this.props.event.participants} | Visitors: {this.props.event.visitors}</p>
                     <ListUsers event_id={this.props.event.id}/>
-                    <ListCopmanies event_id={this.props.event.id}/>
+                    <userContext.Consumer>
+                        {({session}) => {
+                            if(session) {
+                                return (
+                                    <ListCopmanies event_id={this.props.event.id}/>
+                                );
+                            } else {
+                                return (
+                                    <div>
+                                        <Button color="primary" variant="outlined" disabled> Log in to explore</Button>
+                                        <br></br>
+                                    </div>
+                                );
+                            }
+                        }}
+                    </userContext.Consumer>
                 </div>
 
                 <div>

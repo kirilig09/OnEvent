@@ -49,7 +49,23 @@ class Event():
             result = db.execute("UPDATE events SET visitors = ? WHERE id = ?",
                     (count[0], event_id))
 
+    @staticmethod
+    def update_visitors(event_id, count):
+        result = None
+        with SQLite() as db:
+            result = db.execute("UPDATE events SET visitors = ? WHERE id = ?",
+                (count, event_id))
 
+
+
+    @staticmethod
+    def find(event_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM events WHERE id = ?",
+                (event_id,)).fetchone()
+        print(result)
+        return Event(*result) 
 
     @staticmethod
     def deactivate(event_id):
@@ -72,7 +88,6 @@ class Event():
             result = db.execute("SELECT * FROM events WHERE status = ?",
                     ("inactive",)).fetchall()
         return [Event(*row).to_dict() for row in result]
-
 
     @staticmethod
     def all_names():

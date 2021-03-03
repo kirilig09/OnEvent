@@ -106,6 +106,11 @@ def events_list():
     active_events = Event.get_all_active()
     return jsonify(active_events)
 
+@app.route("/api/list-all-events", methods=['GET'])
+def events_archive():
+    events = Event.all()
+    return jsonify(events)
+
 @app.route("/api/list-users", methods=['GET'])
 def list_users():
     event_id = request.args.get('event_id')
@@ -218,6 +223,15 @@ def update_image():
     Company.change_image(content.get('company_id'), content.get('new_image'))
 
     return jsonify({"new_image": content.get('new_image')})
+
+@app.route("/api/join-event", methods=['PATCH'])
+def join_event():
+    content = request.get_json(force=True)
+
+    User.join_event(content.get('user_id'), content.get('event_id'))
+    Event.add_visitor(content.get('event_id'))
+
+    return jsonify({"joined_event": Event.find(content.get('event_id')).name})
 
 if __name__ == "__main__":
     app.run()

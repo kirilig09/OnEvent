@@ -101,6 +101,7 @@ class App extends React.Component {
   render () {
     const context_value = {
       user: this.state.user,
+      session: this.state.session,
       login_user: this.login_user,
       logout_user: this.logout_user
     }
@@ -139,13 +140,9 @@ class App extends React.Component {
                         <Link color="inherit" component={RouterLink} to={"/view-company/"+this.state.user.id}>
                           My Company
                         </Link> :
-                        null
-                      }
-                      {this.state.user.role == "visitor" || this.state.user.role == "admin" ?
                         <Link color="inherit" component={RouterLink} to="/list-events">
                           View events
-                        </Link> :
-                        null
+                        </Link>
                       }
 
                       {/* <Link color="inherit" component={RouterLink} to={"/view-company/"+this.state.user.id}>
@@ -165,19 +162,15 @@ class App extends React.Component {
                   
                   <Switch>
 
-                    {this.state.session == false ?
-                      <div>
-                        <Route path="/register">
-                          <Registration />
-                        </Route>
-                        <Route path="/login">
-                          <Login />
-                        </Route> 
-                      </div> :
-                      <Route path="/logout">
-                        <Logout />
-                      </Route>
-                    }
+                    <Route path="/register">
+                      <Registration />
+                    </Route>
+                    <Route path="/login">
+                      <Login />
+                    </Route>
+                    <Route path="/logout">
+                      <Logout />
+                    </Route>
 
                     {/* <Route to="/register">
                       <Registration />
@@ -189,18 +182,13 @@ class App extends React.Component {
                       <Logout />
                     </Route> */}
 
-                    {this.state.user.role == "participant" ?
-                      <Route path="/view-company/:user_id">
-                        <ParseCompId />
-                      </Route> :
-                      null
-                    }
-                    {this.state.user.role == "visitor" || this.state.user.role == "admin" ?
-                      <Route path="/list-events">
-                        <EventRouter />
-                      </Route> :
-                      null
-                    }
+                    <Route path="/view-company/:user_id">
+                      <ParseCompId />
+                    </Route>
+                     
+                    <Route path="/list-events">
+                      <EventRouter />
+                    </Route>
 
                     {/* <Route path="/view-company/:user_id">
                       <ParseCompId />

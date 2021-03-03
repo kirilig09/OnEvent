@@ -1,23 +1,23 @@
 import React from 'react';
 import Event from './Event.js';
+import ParticipantsPerEventChart from './ParticipantsPerEventChart';
 import UsersPerEventChart from './ParticipantsPerEventChart';
-import {list_active_events} from './Fetch';
+import {list_all_events} from './Fetch';
 import {
     Button
 } from '@material-ui/core';
-import userContext from './userContext.js';
+import userContext from './userContext';
 
-class ListEvents extends React.Component {
-
+class EventsArchive extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-                events: []
+            events: [],
         };
     }
-    
+
     async loadEvents() {
-        const events_list = await list_active_events();
+        const events_list = await list_all_events();
         console.log(events_list);
         this.setState({events: events_list});
     }
@@ -45,11 +45,26 @@ class ListEvents extends React.Component {
                 </userContext.Consumer>
                 <br></br>
                 {this.state.events.map((event) => {
-                    return <Event event={event}></Event>
+                    return (
+                        <div>
+                            <br></br>
+                            {event.status == "active" ?
+                                <h3 style={{backgroundColor: "green", width: "8em",}}> Status: {event.status} </h3> :
+                                <h3 style={{backgroundColor: "red", width: "8em",}}> Status: {event.status} </h3>
+                            }
+                            <Event event={event}></Event>
+                        </div>
+                    )
                 })}
+                {this.state.events.length > 0 ?
+                    <div>
+                        <ParticipantsPerEventChart events={this.state.events} /> 
+                    </div> :
+                    null
+                }
             </div>
         );
     }
 }
 
-export default ListEvents;
+export default EventsArchive;

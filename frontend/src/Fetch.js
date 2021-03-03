@@ -145,6 +145,18 @@ export const list_active_events = async () => {
      return await response.json();
 }
 
+export const list_all_events = async () => {
+    const response = await fetch('/api/list-all-events', {
+        method: 'GET',
+        headers: {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+             "X-CSRFToken": csrfToken,
+        }
+     });
+     return await response.json();
+}
+
 export const list_users = async (event_id) => {
     const response = await fetch('/api/list-users?event_id='+event_id, {
        method: 'GET',
@@ -244,6 +256,18 @@ export const update_image = async (company_id, new_image) => {
             "X-CSRFToken": csrfToken,
         },
         body: JSON.stringify({ company_id: company_id, new_image: new_image })
+    });
+}
+
+export const join_event = async (user_id, event_id) => {
+    fetch("/api/join-event", {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ user_id: user_id, event_id: event_id })
     });
 }
 
