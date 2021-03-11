@@ -2,12 +2,12 @@ from database import SQLite
 
 class Company():
 
-    def __init__(self, id, name, password, image_link, event):
+    def __init__(self, id, name, password, image_link, event_id):
         self.id = id
         self.name = name
         self.password = password
         self.image_link = image_link
-        self. event = event
+        self.event_id = event_id
 
     def to_dict(self):
         company_data = self.__dict__
@@ -26,6 +26,14 @@ class Company():
             result = db.execute(query)
 
 
+
+    @staticmethod
+    def find(id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM companies WHERE id = ?",
+                    (id,)).fetchone()
+        return Company(*result)
 
     @staticmethod
     def find_id(name, password, event_id):
@@ -47,6 +55,14 @@ class Company():
             result = db.execute("SELECT * FROM companies WHERE event_id = ?",
                     (event_id,)).fetchall()
         return [Company(*row).to_dict() for row in result]
+
+    @staticmethod
+    def get_companies_sp_list(event_id):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM companies WHERE event_id = ?",
+                    (event_id,)).fetchall()
+        return [Company(*row) for row in result]
 
     @staticmethod
     def get_company(company_id):

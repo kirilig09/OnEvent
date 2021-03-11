@@ -126,16 +126,6 @@ class App extends React.Component {
                         </Link>
                       }
 
-                      {/* <Link color="inherit" component={RouterLink} to="/register">
-                        Register as visitor
-                      </Link>
-                      <Link color="inherit" component={RouterLink} to="/login">
-                        Login
-                      </Link>
-                      <Link color="inherit" component={RouterLink} to="/logout">
-                        Logout
-                      </Link> */}
-
                       {this.state.user.role == "participant" ?
                         <Link color="inherit" component={RouterLink} to={"/view-company/"+this.state.user.id}>
                           My Company
@@ -144,13 +134,6 @@ class App extends React.Component {
                           View events
                         </Link>
                       }
-
-                      {/* <Link color="inherit" component={RouterLink} to={"/view-company/"+this.state.user.id}>
-                        My Company
-                        </Link>
-                        <Link color="inherit" component={RouterLink} to="/list-events">
-                        View events
-                      </Link> */}
 
                       <div>
                         <p>[Username: {this.state.user.name}]</p>
@@ -172,16 +155,6 @@ class App extends React.Component {
                       <Logout />
                     </Route>
 
-                    {/* <Route to="/register">
-                      <Registration />
-                    </Route>
-                    <Route to="/login">
-                      <Login />
-                    </Route>
-                    <Route to="/logout">
-                      <Logout />
-                    </Route> */}
-
                     <Route path="/view-company/:user_id">
                       <ParseCompId />
                     </Route>
@@ -189,14 +162,6 @@ class App extends React.Component {
                     <Route path="/list-events">
                       <EventRouter />
                     </Route>
-
-                    {/* <Route path="/view-company/:user_id">
-                      <ParseCompId />
-                    </Route>
-                    <Route path="/list-events">
-                      <EventRouter />
-                    </Route> */}
-
                   </Switch>
                 </Router>
               </div>

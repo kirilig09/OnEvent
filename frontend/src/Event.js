@@ -25,13 +25,17 @@ class Event extends React.Component {
         return (
             <div>
                 <div>
+                    {this.props.event.subscriptable ?
+                        <h3>Entry fee: {this.props.event.payment} $</h3> :
+                        <h3>Free entrance!</h3>
+                    }
                     <p>Name: {this.props.event.name} | Participants: {this.props.event.participants} | Visitors: {this.props.event.visitors}</p>
                     <ListUsers event_id={this.props.event.id}/>
                     <userContext.Consumer>
                         {({session}) => {
                             if(session) {
                                 return (
-                                    <ListCopmanies event_id={this.props.event.id}/>
+                                    <ListCopmanies event={this.props.event}/>
                                 );
                             } else {
                                 return (
@@ -60,17 +64,19 @@ class Event extends React.Component {
 
                 <Router>
                     <div>
-                    <Link color="inherit" component={RouterLink} to="/participate">
-                        <Button color="primary" variant="outlined">Participate</Button>
-                    </Link>
-                    
                     <userContext.Consumer>
-                        {({user}) => {
-                                if(user.role == "visitor") {
+                        {({session}) => {
+                                if(!session) {
                                     return(
-                                        <Link color="inherit" component={RouterLink} to="/register_company">
-                                            <Button color="primary" variant="outlined">Register company</Button> 
-                                        </Link>
+                                        <div>
+                                            <br></br>
+                                            <Link color="inherit" component={RouterLink} to="/participate">
+                                                <Button color="primary" variant="outlined">Participate</Button>
+                                            </Link>
+                                            <Link color="inherit" component={RouterLink} to="/register_company">
+                                                <Button color="primary" variant="outlined">Register company</Button> 
+                                            </Link>
+                                        </div>
                                     );
                                 }
                             }

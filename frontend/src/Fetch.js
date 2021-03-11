@@ -15,6 +15,22 @@ const csrf = () => {
     });
 };
 
+export const payment_checkout_session = async (company_id) => {
+    const response = await fetch("/api/create-checkout-session", {
+        method: 'POST',
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify({ company_id: company_id })
+    });
+
+    const session = await response.json();
+    console.log(session);
+    return session;
+}
+
 export const isLogged = () => {
     return isAuthenticated
 }
@@ -85,7 +101,7 @@ export const logout = () => {
     });
 };
 
-export const register = (username, password) => {
+export const register = (username, password, email) => {
     fetch('/api/register', {
         method: 'POST',
         headers: {
@@ -93,11 +109,11 @@ export const register = (username, password) => {
             'Content-Type': 'application/json',
             "X-CSRFToken": csrfToken,
         },
-        body: JSON.stringify({ username: username, password: password })
+        body: JSON.stringify({ username: username, password: password, email: email })
     })
 };
 
-export const register_participant = (username, password, c_name, c_password, event) => {
+export const register_participant = (username, password, email, c_name, c_password, event) => {
     fetch('/api/register-participant', {
         method: 'POST',
         headers: {
@@ -105,11 +121,11 @@ export const register_participant = (username, password, c_name, c_password, eve
             'Content-Type': 'application/json',
             "X-CSRFToken": csrfToken,
         },
-        body: JSON.stringify({ username: username, password: password, company_name: c_name, company_password: c_password, event: event })
+        body: JSON.stringify({ username: username, password: password, email: email, company_name: c_name, company_password: c_password, event: event })
     })
 }
 
-export const create_event = (name) => {
+export const create_event = (name, subscriptable, payment) => {
     fetch('/api/create-event', {
         method: 'POST',
         headers: {
@@ -117,7 +133,7 @@ export const create_event = (name) => {
             'Content-Type': 'application/json',
             "X-CSRFToken": csrfToken,
         },
-        body: JSON.stringify({ name: name })
+        body: JSON.stringify({ name: name, subscriptable: subscriptable, payment: payment })
     })
 };
 
@@ -158,7 +174,7 @@ export const list_all_events = async () => {
 }
 
 export const list_users = async (event_id) => {
-    const response = await fetch('/api/list-users?event_id='+event_id, {
+    const response = await fetch('/api/list-participating?event_id='+event_id, {
        method: 'GET',
        headers: {
             'Accept': 'application/json',
@@ -166,7 +182,9 @@ export const list_users = async (event_id) => {
             "X-CSRFToken": csrfToken,
        }
     })
-    return await response.json();
+    const participants = await response.json();
+    console.log(participants);
+    return participants;
 };
 
 export const list_companies = async (event_id) => {
@@ -268,6 +286,32 @@ export const join_event = async (user_id, event_id) => {
             "X-CSRFToken": csrfToken,
         },
         body: JSON.stringify({ user_id: user_id, event_id: event_id })
+    });
+}
+
+export const payment_status = async (company_id) => {
+    const response = await fetch("/api/payment-status?company_id="+company_id, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        }
+    });
+    const status = await response.json();
+    console.log(status);
+    return status;
+}
+
+export const subscribe_company = async (company_id) => {
+    fetch("/api/subscribe-company", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ company_id: company_id })
     });
 }
 

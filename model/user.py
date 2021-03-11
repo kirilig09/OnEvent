@@ -3,17 +3,14 @@ from flask_login import UserMixin
 
 class User(UserMixin):
 
-    def __init__(self, id, name, password, role, event, company):
+    def __init__(self, id, name, password, role, email, event, company):
         self.id = id
         self.name = name
         self.password = password
         self.role = role
+        self.email = email
         self.event = event
         self.company = company
-
-        possibleRoles = ("admin", "participant", "visitor")
-        if role in possibleRoles:
-            self.role = role
 
     def to_dict(self):
         user_data = self.__dict__
@@ -71,29 +68,29 @@ class User(UserMixin):
 
 
 
-    def registerAdmin(name, password):
+    def registerAdmin(name, password, email):
         result = None
         query = "INSERT INTO users {} VALUES {}"
-        args = (name, password, "admin")
-        query = query.format("(name, password, role)", args)
+        args = (name, password, "admin", email)
+        query = query.format("(name, password, role, email)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
 
-    def registerVisitor(name, password):
+    def registerVisitor(name, password, email):
         result = None
         query = "INSERT INTO users {} VALUES {}"
-        args = (name, password, "visitor")
-        query = query.format("(name, password, role)", args)
+        args = (name, password, "visitor", email)
+        query = query.format("(name, password, role, email)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
 
-    def registerParticipant(name, password, event, c_id):
+    def registerParticipant(name, password, email, event, c_id):
         result = None
         query = "INSERT INTO users {} VALUES {}"
-        args = (name, password, "participant", event, c_id)
-        query = query.format("(name, password, role, event_id, company_id)", args)
+        args = (name, password, "participant", email, event, c_id)
+        query = query.format("(name, password, role, email, event_id, company_id)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)

@@ -13,6 +13,7 @@ class EventsArchive extends React.Component {
         super(props);
         this.state = {
             events: [],
+            graph_flag: false
         };
     }
 
@@ -30,12 +31,27 @@ class EventsArchive extends React.Component {
         return (
             <div>
                 <Button color="primary" variant="contained" onClick={() => {this.loadEvents()}}>Reload events</Button>
+                <br></br>
                 <userContext.Consumer>
                     {({user}) => {
                         if(user.role == "admin") {
-                            if(this.state.events.length > 0) {
+                            return(
+                                <div>
+                                    <br></br>
+                                    <Button color="primary" variant="outlined" size="small" onClick={() => {this.setState({ graph_flag: true })}}>View graph</Button>
+                                </div>
+                            );
+                        }
+                    }}
+                </userContext.Consumer>
+                <userContext.Consumer>
+                    {({user}) => {
+                        if(user.role == "admin") {
+                            if(this.state.events.length > 0 && this.state.graph_flag) {
                                 return(
                                     <div>
+                                        <Button color="secondary" variant="outlined" size="small" onClick={() => {this.setState({ graph_flag: false })}}>Close graph</Button>
+                                        <br></br>
                                         <UsersPerEventChart events={this.state.events} /> 
                                     </div>
                                 );
@@ -56,12 +72,6 @@ class EventsArchive extends React.Component {
                         </div>
                     )
                 })}
-                {this.state.events.length > 0 ?
-                    <div>
-                        <ParticipantsPerEventChart events={this.state.events} /> 
-                    </div> :
-                    null
-                }
             </div>
         );
     }

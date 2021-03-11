@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS events
         name TEXT NOT NULL UNIQUE,
         participants INT,
         visitors INT,
-        status TEXT NOT NULL
+        status TEXT NOT NULL,
+        subscriptable BOOLEAN NOT NULL,
+        payment INT
     )
 ''')
 conn.commit()
@@ -24,6 +26,7 @@ CREATE TABLE IF NOT EXISTS users
         name TEXT NOT NULL,
         password TEXT NOT NULL,
         role TEXT NOT NULL,
+        email TEXT NOT NULL,
         event_id INTEGER,
         company_id INTEGER,
         FOREIGN KEY(event_id) REFERENCES events(id),
@@ -54,6 +57,18 @@ CREATE TABLE IF NOT EXISTS messages
         company_id INTEGER,
         FOREIGN KEY(sender_id) REFERENCES users(id),
         FOREIGN KEY(company_id) REFERENCES companies(id)
+    )
+''')
+conn.commit()
+
+conn.cursor().execute('''
+CREATE TABLE IF NOT EXISTS payments
+    (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        event_id INTEGER NOT NULL,
+        company_id INTEGER NOT NULL,
+        FOREIGN KEY(event_id) REFERENCES events(id),
+        FOREIGN KEY(company_id) REFERENCES company(id)
     )
 ''')
 conn.commit()

@@ -6,7 +6,7 @@ import {BarChart,
     YAxis, 
     CartesianGrid, 
     Tooltip, 
-    Legend
+    Legend,
 } from 'recharts';
 
 class UsersPerEventChart extends React.Component {

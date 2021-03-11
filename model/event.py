@@ -2,12 +2,14 @@ from database import SQLite
 
 class Event():
 
-    def __init__(self, id, name, participants, visitors, status):
+    def __init__(self, id, name, participants, visitors, status, subscriptable, payment):
         self.id = id
         self.name = name
         self.participants = participants
         self.visitors = visitors
         self.status = status
+        self.subscriptable = subscriptable
+        self.payment = payment
 
     def to_dict(self):
         event_data = self.__dict__
@@ -20,11 +22,22 @@ class Event():
     #     return self
 
 
+    @staticmethod
     def create(name):
         result = None
         query = "INSERT INTO events {} VALUES {}"
-        args = (name, 0, 0, "active")
-        query = query.format("(name, participants, visitors, status)", args)
+        args = (name, 0, 0, "active", False)
+        query = query.format("(name, participants, visitors, status, subscriptable)", args)
+        print(query)
+        with SQLite() as db:
+            result = db.execute(query)
+
+    @staticmethod
+    def create_subscriptable(name, payment):
+        result = None
+        query = "INSERT INTO events {} VALUES {}"
+        args = (name, 0, 0, "active", True, payment)
+        query = query.format("(name, participants, visitors, status, subscriptable, payment)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
