@@ -20,7 +20,7 @@ class ViewParticipant extends React.Component {
                         {({user}) => {
                             if(user.role == "admin") {
                                 return (
-                                    <InviteButton mailto={"mailto:"+this.props.participant.email} />
+                                    <InviteButton participant={this.props.participant} mailto={"mailto:"+this.props.participant.email} />
                                 );
                             }
                         }}

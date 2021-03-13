@@ -2,12 +2,10 @@ from database import SQLite
 
 class Payment():
 
-    def __init__(self, id, company_id, event_id, status):
+    def __init__(self, id, event_id, company_id):
         self.id = id
-        self.content = content
-        self.company_id = company_id
         self.event_id = event_id
-        self.status = status
+        self.company_id = company_id
 
     def to_dict(self):
         message_data = self.__dict__

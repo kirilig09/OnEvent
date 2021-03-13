@@ -19,6 +19,7 @@ from model.user import User
 from model.company import Company
 from model.message import Message
 from model.payment import Payment
+from model.invite import Invite
 
 app = Flask(__name__)
 
@@ -42,7 +43,7 @@ cors = CORS(
     supports_credentials=True,
 )
 
-#User.registerAdmin("Admin", "admin", "Cool Email")
+# User.registerAdmin("Admin", "admin", "no-reply@test")
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -211,15 +212,17 @@ def register_participant():
 
     return jsonify({"register": True})   
 
-@app.route("/api/create-event", methods=['GET', 'POST'])
+@app.route("/api/create-event", methods=['POST'])
 def create_event():
     content = request.get_json(force=True)
     print(content)
 
+    creator_id = current_user.id
+
     if content.get('subscriptable'):
-        Event.create_subscriptable(content.get('name'), content.get('payment'))
+        Event.create_subscriptable(content.get('name'), creator_id, content.get('payment'), content.get('is_private'))
     else:
-        Event.create(content.get('name'))
+        Event.create(content.get('name'), creator_id, content.get('is_private'))
 
     return jsonify({"create": True})
 
@@ -292,6 +295,33 @@ def subscribe_company():
     Payment.make_payment(company_id, event_id)
 
     return jsonify({ "subscription": True })
+
+@app.route("/api/find-invite", methods=['GET'])
+def find_invite():
+    event_id = request.args.get('event_id')
+
+    if not Event.find(event_id).is_private:
+        return jsonify({ "invite": True })
+    else:
+        if current_user.is_authenticated:
+            if Event.find(event_id).creator_id == current_user.id:
+                return jsonify({ "invite": True })
+            elif Invite.check_for_invite(event_id, current_user.email):
+                return jsonify({ "invite": True })
+            else:
+                return jsonify({ "invite": False })
+        else:
+            return jsonify({ "invite": False })
+
+@app.route("/api/send-invite", methods=['POST'])
+def save_invite():
+    content = request.get_json(force=True)
+
+    event_id = Event.find_by_name(content.get('event_name')).id
+
+    Invite.send_invite(event_id, content.get('user_email'))
+
+    return jsonify({ "invite": "sent" })
 
 if __name__ == "__main__":
     app.run()

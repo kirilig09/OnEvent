@@ -2,14 +2,16 @@ from database import SQLite
 
 class Event():
 
-    def __init__(self, id, name, participants, visitors, status, subscriptable, payment):
+    def __init__(self, id, name, creator_id, participants, visitors, status, subscriptable, payment, is_private):
         self.id = id
         self.name = name
+        self.creator_id = creator_id
         self.participants = participants
         self.visitors = visitors
         self.status = status
         self.subscriptable = subscriptable
         self.payment = payment
+        self.is_private = is_private
 
     def to_dict(self):
         event_data = self.__dict__
@@ -23,24 +25,26 @@ class Event():
 
 
     @staticmethod
-    def create(name):
+    def create(name, creator_id, is_private):
         result = None
         query = "INSERT INTO events {} VALUES {}"
-        args = (name, 0, 0, "active", False)
-        query = query.format("(name, participants, visitors, status, subscriptable)", args)
+        args = (name, creator_id, 0, 0, "active", False, is_private)
+        query = query.format("(name, creator_id, participants, visitors, status, subscriptable, is_private)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
 
     @staticmethod
-    def create_subscriptable(name, payment):
+    def create_subscriptable(name, creator_id, payment, is_private):
         result = None
         query = "INSERT INTO events {} VALUES {}"
-        args = (name, 0, 0, "active", True, payment)
-        query = query.format("(name, participants, visitors, status, subscriptable, payment)", args)
+        args = (name, creator_id, 0, 0, "active", True, payment, is_private)
+        query = query.format("(name, creator_id, participants, visitors, status, subscriptable, payment, is_private)", args)
         print(query)
         with SQLite() as db:
             result = db.execute(query)
+
+
 
     @staticmethod
     def add_participant(event_id):
@@ -77,8 +81,15 @@ class Event():
         with SQLite() as db:
             result = db.execute("SELECT * FROM events WHERE id = ?",
                 (event_id,)).fetchone()
-        print(result)
         return Event(*result) 
+
+    @staticmethod
+    def find_by_name(name):
+        result = None
+        with SQLite() as db:
+            result = db.execute("SELECT * FROM events WHERE name = ?",
+                    (name,)).fetchone()
+        return Event(*result)
 
     @staticmethod
     def deactivate(event_id):

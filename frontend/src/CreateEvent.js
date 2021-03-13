@@ -14,12 +14,14 @@ class CreateEvent extends React.Component {
         this.state = {
                 name: '',
                 subscriptable: true,
-                payment: 0
+                payment: 0,
+                is_private: false
         };
 
         this.handleChangeName = this.handleChangeName.bind(this);
-        this.handleSwitchChange = this.handleSwitchChange.bind(this);
+        this.handleSubSwitch = this.handleSubSwitch.bind(this);
         this.handleAmountChange = this.handleAmountChange.bind(this);
+        this.handlePrivateSwitch = this.handlePrivateSwitch.bind(this);
         this.saveName = this.saveName.bind(this);
     }
     
@@ -27,7 +29,7 @@ class CreateEvent extends React.Component {
         this.setState({name: event.target.value});
     }
 
-    handleSwitchChange(event) {
+    handleSubSwitch(event) {
         this.setState({ [event.target.name]: event.target.checked });
     }
 
@@ -35,8 +37,12 @@ class CreateEvent extends React.Component {
         this.setState({ payment: event.target.value });
     }
 
+    handlePrivateSwitch(event) {
+        this.setState({ [event.target.name]: event.target.checked });
+    }
+
     saveName() {
-        create_event(this.state.name, this.state.subscriptable, this.state.payment);
+        create_event(this.state.name, this.state.subscriptable, this.state.payment, this.state.is_private);
     }
 
     render() {
@@ -49,8 +55,18 @@ class CreateEvent extends React.Component {
                 <FormControlLabel
                     control={
                         <Switch 
+                            checked={this.state.is_private} 
+                            onChange={this.handlePrivateSwitch}
+                            name="is_private"
+                        />
+                    }
+                    label="Private"
+                />
+                <FormControlLabel
+                    control={
+                        <Switch 
                             checked={this.state.subscriptable} 
-                            onChange={this.handleSwitchChange}
+                            onChange={this.handleSubSwitch}
                             name="subscriptable"
                         />
                     }

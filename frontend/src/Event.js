@@ -4,6 +4,7 @@ import ListCopmanies from './ListCompanies';
 import DeactivateEvent from './DeactivateEvent';
 import ParticipantRegistration from './ParticRegistration';
 import userContext from './userContext';
+import { check_for_invite } from './Fetch';
 import {
     Button,
     Link
@@ -19,81 +20,97 @@ import CreateCompany from './CreateCompany.js';
 class Event extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            show: true,
+        };
+
+        this.componentDidMount = this.componentDidMount.bind(this);
+    }
+
+    async componentDidMount() {
+        const invite = await check_for_invite(this.props.event.id);
+        console.log("Invite is "+invite.invite);
+        this.setState({ show: invite.invite });
     }
 
     render() {
         return (
             <div>
-                <div>
-                    {this.props.event.subscriptable ?
-                        <h3>Entry fee: {this.props.event.payment} $</h3> :
-                        <h3>Free entrance!</h3>
-                    }
-                    <p>Name: {this.props.event.name} | Participants: {this.props.event.participants} | Visitors: {this.props.event.visitors}</p>
-                    <ListUsers event_id={this.props.event.id}/>
-                    <userContext.Consumer>
-                        {({session}) => {
-                            if(session) {
-                                return (
-                                    <ListCopmanies event={this.props.event}/>
-                                );
-                            } else {
-                                return (
-                                    <div>
-                                        <Button color="primary" variant="outlined" disabled> Log in to explore</Button>
-                                        <br></br>
-                                    </div>
-                                );
-                            }
-                        }}
-                    </userContext.Consumer>
-                </div>
-
-                <div>
-                    <userContext.Consumer>
-                        {({user}) => {
-                                if(user.role == "admin") {
-                                    return(
-                                        <DeactivateEvent event_id={this.props.event.id} />
-                                    );
-                                }
-                            }
-                        }
-                    </userContext.Consumer>
-                </div>
-
-                <Router>
+                {this.state.show ?
                     <div>
-                    <userContext.Consumer>
-                        {({session}) => {
-                                if(!session) {
-                                    return(
-                                        <div>
-                                            <br></br>
-                                            <Link color="inherit" component={RouterLink} to="/participate">
-                                                <Button color="primary" variant="outlined">Participate</Button>
-                                            </Link>
-                                            <Link color="inherit" component={RouterLink} to="/register_company">
-                                                <Button color="primary" variant="outlined">Register company</Button> 
-                                            </Link>
-                                        </div>
-                                    );
-                                }
+                        <div>
+                            {this.props.event.subscriptable ?
+                                <h3>Entry fee: {this.props.event.payment} $</h3> :
+                                <h3>Free entrance!</h3>
                             }
-                        }
-                    </userContext.Consumer>
-                    
-                    <Switch>
-                        <Route path="/participate">
-                            <ParticipantRegistration event={this.props.event.id} />
-                        </Route>
-                        <Route path="/register_company">
-                            <CreateCompany event_id={this.props.event.id}/>
-                        </Route>
-                    </Switch>
-                    </div>
-                </Router>
-             </div>
+                            <p>Name: {this.props.event.name} | Participants: {this.props.event.participants} | Visitors: {this.props.event.visitors}</p>
+                            <ListUsers event_id={this.props.event.id}/>
+                            <userContext.Consumer>
+                                {({session}) => {
+                                    if(session) {
+                                        return (
+                                            <ListCopmanies event={this.props.event}/>
+                                        );
+                                    } else {
+                                        return (
+                                            <div>
+                                                <Button color="primary" variant="outlined" disabled> Log in to explore</Button>
+                                                <br></br>
+                                            </div>
+                                        );
+                                    }
+                                }}
+                            </userContext.Consumer>
+                        </div>
+
+                        <div>
+                            <userContext.Consumer>
+                                {({user}) => {
+                                        if(user.role == "admin") {
+                                            return(
+                                                <DeactivateEvent event_id={this.props.event.id} />
+                                            );
+                                        }
+                                    }
+                                }
+                            </userContext.Consumer>
+                        </div>
+
+                        <Router>
+                            <div>
+                            <userContext.Consumer>
+                                {({session}) => {
+                                        if(!session) {
+                                            return(
+                                                <div>
+                                                    <br></br>
+                                                    <Link color="inherit" component={RouterLink} to="/participate">
+                                                        <Button color="primary" variant="outlined">Participate</Button>
+                                                    </Link>
+                                                    <Link color="inherit" component={RouterLink} to="/register_company">
+                                                        <Button color="primary" variant="outlined">Register company</Button> 
+                                                    </Link>
+                                                </div>
+                                            );
+                                        }
+                                    }
+                                }
+                            </userContext.Consumer>
+                            
+                            <Switch>
+                                <Route path="/participate">
+                                    <ParticipantRegistration event={this.props.event.id} />
+                                </Route>
+                                <Route path="/register_company">
+                                    <CreateCompany event_id={this.props.event.id}/>
+                                </Route>
+                            </Switch>
+                            </div>
+                        </Router>
+                    </div> :
+                    null
+                }
+            </div>
         );
     }
 }

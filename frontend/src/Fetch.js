@@ -125,7 +125,7 @@ export const register_participant = (username, password, email, c_name, c_passwo
     })
 }
 
-export const create_event = (name, subscriptable, payment) => {
+export const create_event = (name, subscriptable, payment, is_private) => {
     fetch('/api/create-event', {
         method: 'POST',
         headers: {
@@ -133,7 +133,7 @@ export const create_event = (name, subscriptable, payment) => {
             'Content-Type': 'application/json',
             "X-CSRFToken": csrfToken,
         },
-        body: JSON.stringify({ name: name, subscriptable: subscriptable, payment: payment })
+        body: JSON.stringify({ name: name, subscriptable: subscriptable, payment: payment, is_private: is_private })
     })
 };
 
@@ -312,6 +312,32 @@ export const subscribe_company = async (company_id) => {
             "X-CSRFToken": csrfToken,
         },
         body: JSON.stringify({ company_id: company_id })
+    });
+}
+
+export const check_for_invite = async (event_id) => {
+    const response = await fetch("/api/find-invite?event_id="+event_id, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        }
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+}
+
+export const send_invite = async (event_name, user_email) => {
+    fetch("/api/send-invite", {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrfToken,
+        },
+        body: JSON.stringify({ event_name: event_name, user_email: user_email })
     });
 }
 

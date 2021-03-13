@@ -68,6 +68,7 @@ class User(UserMixin):
 
 
 
+    @staticmethod
     def registerAdmin(name, password, email):
         result = None
         query = "INSERT INTO users {} VALUES {}"
@@ -77,6 +78,7 @@ class User(UserMixin):
         with SQLite() as db:
             result = db.execute(query)
 
+    @staticmethod
     def registerVisitor(name, password, email):
         result = None
         query = "INSERT INTO users {} VALUES {}"
@@ -86,6 +88,7 @@ class User(UserMixin):
         with SQLite() as db:
             result = db.execute(query)
 
+    @staticmethod
     def registerParticipant(name, password, email, event, c_id):
         result = None
         query = "INSERT INTO users {} VALUES {}"
@@ -95,12 +98,14 @@ class User(UserMixin):
         with SQLite() as db:
             result = db.execute(query)
 
+    @staticmethod
     def bind_company(user_id, company_id):
         result = None
         with SQLite() as db:
             result = db.execute("UPDATE users SET company_id = ? WHERE id = ?",
                 (company_id, user_id))
 
+    @staticmethod
     def join_event(user_id, event_id):
         result = None
         with SQLite() as db:
@@ -116,18 +121,21 @@ class User(UserMixin):
                     "SELECT * FROM users").fetchall()
         return [User(*row).to_dict() for row in result]
 
+    @staticmethod
     def get_admins():
         with SQLite() as db:
             result = db.execute(
                     "SELECT * FROM users WHERE role = 'admin'").fetchall()
         return [User(*row).to_dict() for row in result]
 
+    @staticmethod
     def get_all_participants():
         with SQLite() as db:
             result = db.execute(
                     "SELECT * FROM users WHERE role = 'participant'").fetchall()
         return [User(*row).to_dict() for row in result]
 
+    @staticmethod
     def get_participants_sp(event_id):
         result = None
         with SQLite() as db:
@@ -135,12 +143,14 @@ class User(UserMixin):
                     (event_id, "participant")).fetchall()
         return [User(*row).to_dict() for row in result]
 
+    @staticmethod
     def get_all_visitors():
         with SQLite() as db:
             result = db.execute(
                     "SELECT * FROM users WHERE role = 'visitor'").fetchall()
         return [User(*row).to_dict() for row in result]
 
+    @staticmethod
     def get_visitors_sp(event_id):
         result = None
         with SQLite() as db:
@@ -148,21 +158,10 @@ class User(UserMixin):
                     (event_id, "visitor")).fetchall()
         return [User(*row).to_dict() for row in result]
 
+    @staticmethod
     def count_visitors_sp(event_id):
         result = None
         with SQLite() as db:
             result = db.execute("SELECT COUNT(id) FROM users WHERE event_id = ? AND role = ?",
                     (event_id, "visitor")).fetchone()
         return result[0]
-
-
-    # @staticmethod
-    # def __get_save_query(self):
-    #     query = "{} INTO events {} VALUES {}"
-    #     # if self.id == None:
-    #     #     args = (self.name)                                   - we use create() in this scenario
-    #     #     query = query.format("INSERT", "(name)", args)
-    #     # else:
-    #         args = (self.id, self.name)
-    #         query = query.format("REPLACE", "(id, name)", args)
-    #     return query
